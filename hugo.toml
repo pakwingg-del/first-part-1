@@ -1,0 +1,36 @@
+baseURL = 'https://my-viral-news0.pages.dev/'
+languageCode = 'en-us'
+title = 'Viral News Network'
+theme = "FixIt"
+
+paginate = 10
+
+[params]
+    env = "production"
+    title = "Viral News Network"
+    description = "The latest trending stories across the globe"
+    defaultTheme = "auto"
+    
+    # FixIt 專用的首頁設定 (取代原本的 homeInfoParams)
+    [params.home.profile]
+        enable = true
+        title = "Welcome to Viral News"
+        subtitle = "Get your hourly dose of viral content here."
+        typeit = true
+        social = true
+
+[menu]
+    [[menu.main]]
+        identifier = "posts"
+        name = "Latest News"
+        url = "/posts/"
+        weight = 10
+
+[content]
+    [content.posts]
+        path = "content/posts"
+
+[build]
+    writeStats = true
+    [build.buildStats]
+        enableRepoInfo = true
