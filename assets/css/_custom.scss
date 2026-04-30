@@ -1,21 +1,70 @@
 // ==========================================
-// Viral News Network 簡約新聞風背景設定
+// Viral News Network 極致專業版美化 CSS
+// (合併背景設定與 CTR 優化)
 // ==========================================
 
+/* 1. 核心背景與遮罩設定 (保留並優化) */
 body {
-    // 引入剛才生成的簡約新聞背景圖
+    // 引入你的簡約新聞背景圖 (確保檔名 /images/news-bg.png 正確)
     background-image: url("/images/news-bg.png");
     background-attachment: fixed; 
     background-size: cover;        
     background-repeat: no-repeat;
     background-position: center;
 
-    // 添加一层非常淡的黑色遮罩，进一步压暗背景，突出文字
+    // 添加一层黑色遮罩，進一步壓暗背景，突顯文字，增加「 Pro 感 」
     &::before {
         content: "";
         position: fixed;
         top: 0; left: 0; width: 100%; height: 100%;
-        background: rgba(0, 0, 0, 0.4); // 遮罩可以淡一些
+        background: rgba(0, 0, 0, 0.8) !important; // 【優化】壓暗至 0.8，提升文字可讀性
         z-index: -1;
     }
+}
+
+/* 2. CTR 優化：文章標題 (新聞配色策略) */
+.post-title {
+    // 確保標題夠粗、有分量
+    font-weight: 800 !important;
+    line-height: 1.3 !important;
+    
+    // 【最吸睛】將標題改為鮮紅色 (Google Search 點擊率極高)
+    a {
+        color: #ff4d4d !important; // 新聞爆料感嘅紅色
+        transition: color 0.3s ease;
+        text-decoration: none !important; // 去除下劃線
+
+        // 滑鼠游標移過去嗰陣變白色，強調可選性
+        &:hover {
+            color: #ffffff !important;
+        }
+    }
+}
+
+/* 3. 去除「Anonymous」與日期 (Optional but Recommended) */
+// 從 SEO 角度，Google 比較鍾意有作者，但 Anonymous 扣分。
+// 對於 Click Farm，建議隱藏日期，增加時效性「新鮮感」。
+.post-meta {
+    // 隱藏作者 (Anonymous)
+    .post-author {
+        display: none !important;
+    }
+    
+    // 【選填】隱藏日期 (如果你想文章望落去一直「新鮮」)
+    // .post-publish {
+    //     display: none !important;
+    // }
+    
+    // 調整 meta 文字顏色，等佢唔好搶咗紅色標題風頭
+    color: #888888 !important; 
+}
+
+/* 4. 修正首頁 subtitle 顏色 */
+.home-profile .home-subtitle {
+    color: #aaaaaa !important; // 稍微壓暗 subtitle，突出標題
+}
+
+/* 5. 優化內容文字顏色 (確保深色模式可讀性) */
+.post-content, .home-profile .home-title {
+    color: #ffffff !important; // 強制為白色
 }
