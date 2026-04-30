@@ -14,7 +14,14 @@ paginate = 10
     # Header 設定
     [params.header]
         fixed = true
-        title = "🔥 Viral News Network" # 加個火圖標更吸睛
+        # 舊版可能直接寫 title = "..."，新版要分開寫
+        [params.header.title]
+            name = "🔥 Viral News Network" # 網頁左上角顯示的名稱
+            logo = ""                     # 如果冇 logo 就留空，唔好刪除呢行
+            pre = ""                      # 標題前綴
+            post = ""                     # 標題後綴
+
+    # ... 其他設定保持不變 ...
 
     # FixIt 專用首頁設定 (保留你原本嘅 typeit 特效)
     [params.home.profile]
@@ -48,7 +55,7 @@ paginate = 10
 
 # 永久連結優化：令 URL 更有層次感，方便 Google 爬取
 [permalinks]
-    posts = "/:year/:month/:day/:filename/"
+    posts = "/:year/:month/:day/:contentbasename/"
 
 [build]
     writeStats = true
