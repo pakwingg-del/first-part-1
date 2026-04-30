@@ -1,6 +1,6 @@
 // ==========================================
 // Viral News Network 極致專業版美化 CSS
-// (合併背景設定與 CTR 優化)
+// (強制奪權版：修正標題灰色問題)
 // ==========================================
 
 /* 1. 核心背景與遮罩設定 */
@@ -20,59 +20,71 @@ body {
     }
 }
 
-/* 2. CTR 優化：文章標題 (新聞配色) */
-.post-title {
+/* 2. 【強制奪權】文章標題：解決灰色問題，恢復鮮紅色 */
+// 針對首頁同清單頁嘅標題連結進行強力覆蓋
+.post-title, 
+.post-title a, 
+.post-title a:link, 
+.post-title a:visited,
+.compact .post-title a {
+    color: #ff4d4d !important; 
     font-weight: 800 !important;
     line-height: 1.3 !important;
-    
-    a {
-        color: #ff4d4d !important; 
-        transition: color 0.3s ease;
-        text-decoration: none !important;
-
-        &:hover {
-            color: #ffffff !important;
-        }
-    }
+    text-decoration: none !important;
+    transition: all 0.3s ease !important;
 }
 
-/* 3. 【修正版】強制隱藏 Anonymous 與日期 */
-// FixIt 新版將 meta 拆分得好細，我哋直接全線隱藏
+// 滑鼠移過去變白色，並加少少發光感
+.post-title a:hover {
+    color: #ffffff !important;
+    text-shadow: 0 0 8px rgba(255, 77, 77, 0.6) !important;
+}
+
+/* 3. 強制隱藏 Anonymous 與日期 */
+// 確保 meta 資訊乾淨，只保留閱讀時間等
 .post-meta-author, 
 .post-author,
 .post-meta-publish,
 .post-publish,
-.post-meta-date {
+.post-meta-date,
+.archive-item-date {
     display: none !important;
 }
 
-// 調整剩餘 meta (如字數、閱讀時間) 的顏色
 .post-meta {
     color: #888888 !important; 
 }
 
-/* 4. 目錄 (TOC) 優化：更 Pro 嘅配色 */
+/* 4. 目錄 (TOC) 與連結優化 */
 #TableOfContents {
     a {
-        color: #3498db !important; // 專業嘅藍色連結
+        color: #3498db !important;
         &:hover {
             color: #ffffff !important;
-            text-decoration: underline !important;
         }
     }
     .active {
-        color: #ff4d4d !important; // 當前閱讀章節變紅
+        color: #ff4d4d !important;
     }
 }
 
-/* 5. 修正首頁 subtitle 與文字顏色 */
+/* 5. 修正首頁 profile 文字 */
+.home-profile .home-title {
+    color: #ffffff !important;
+}
+
 .home-profile .home-subtitle {
     color: #aaaaaa !important; 
 }
 
-.post-content, .home-profile .home-title {
-    color: #ffffff !important; 
+/* 6. 文章內文顏色強化 */
+.post-content {
+    color: #ffffff !important;
+    // 確保內文入面嘅連結唔會變咗灰色
+    a {
+        color: #3498db !important;
+        &:hover {
+            color: #ff4d4d !important;
+        }
+    }
 }
-
-/* 6. 去除底部不必要的 Cookie Banner 或雜訊 (若有需要) */
-// .cookie-banner { display: none !important; }
