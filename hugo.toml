@@ -3,21 +3,36 @@ languageCode = 'en-us'
 title = 'Viral News Network'
 theme = "FixIt"
 
+# 每頁顯示 10 篇 (跟返你原本個設定)
 paginate = 10
 
 [params]
     env = "production"
-    title = "Viral News Network"
+    defaultTheme = "dark" # Click Farm 建議用深色底，視覺衝擊力強啲
     description = "The latest trending stories across the globe"
-    defaultTheme = "auto"
     
-    # FixIt 專用的首頁設定 (取代原本的 homeInfoParams)
+    # Header 設定
+    [params.header]
+        fixed = true
+        title = "🔥 Viral News Network" # 加個火圖標更吸睛
+
+    # FixIt 專用首頁設定 (保留你原本嘅 typeit 特效)
     [params.home.profile]
         enable = true
         title = "Welcome to Viral News"
         subtitle = "Get your hourly dose of viral content here."
         typeit = true
         social = true
+
+    # SEO 強化設定 (認領返張萬金油封面圖)
+    [params.seo]
+        image = "/images/default-viral-cover.png"
+        thumbnail = "/images/default-viral-cover.png"
+        schema = true
+
+    # 文章列表佈局設定
+    [params.section]
+        layout = "compact"
 
 [menu]
     [[menu.main]]
@@ -26,11 +41,22 @@ paginate = 10
         url = "/posts/"
         weight = 10
 
+# 確保路徑正確
 [content]
     [content.posts]
         path = "content/posts"
+
+# 永久連結優化：令 URL 更有層次感，方便 Google 爬取
+[permalinks]
+    posts = "/:year/:month/:day/:filename/"
 
 [build]
     writeStats = true
     [build.buildStats]
         enableRepoInfo = true
+
+# 強制要求 Hugo 版本
+[module]
+  [module.hugoVersion]
+    extended = true
+    min = "0.158.0"
