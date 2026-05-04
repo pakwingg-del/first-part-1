@@ -1,90 +1,88 @@
 // ==========================================
-// Viral News Network 極致專業版美化 CSS
-// (強制奪權版：修正標題灰色問題)
+// Viral News Network - BBC Grid Style Layout
 // ==========================================
 
-/* 1. 核心背景與遮罩設定 */
+/* 1. 核心背景與遮罩 (保持不變) */
 body {
     background-image: url("/images/news-bg.png");
     background-attachment: fixed; 
     background-size: cover;        
-    background-repeat: no-repeat;
     background-position: center;
-
     &::before {
         content: "";
         position: fixed;
         top: 0; left: 0; width: 100%; height: 100%;
-        background: rgba(0, 0, 0, 0.8) !important; 
+        background: rgba(0, 0, 0, 0.85) !important; 
         z-index: -1;
     }
 }
 
-/* 2. 【強制奪權】文章標題：解決灰色問題，恢復鮮紅色 */
-// 針對首頁同清單頁嘅標題連結進行強力覆蓋
-.post-title, 
-.post-title a, 
-.post-title a:link, 
-.post-title a:visited,
-.compact .post-title a {
-    color: #ff4d4d !important; 
-    font-weight: 800 !important;
-    line-height: 1.3 !important;
-    text-decoration: none !important;
-    transition: all 0.3s ease !important;
+/* 2. BBC 網格化設定 (首頁文章清單) */
+.home, .posts {
+    .content {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px; // 格與格之間的距離
+        justify-content: space-between;
+    }
+
+    // 每一格文章的寬度 (模仿 BBC 一排兩格或三格)
+    article.archive-item, article.single {
+        flex: 0 0 calc(48% - 10px); // 一排兩格
+        margin-bottom: 20px !important;
+        padding-bottom: 15px !important;
+        border-bottom: 1px solid #333 !important; // BBC 標誌性的分隔線
+        
+        @media (max-width: 768px) {
+            flex: 0 0 100%; // 手機版變回一排一格
+        }
+    }
 }
 
-// 滑鼠移過去變白色，並加少少發光感
-.post-title a:hover {
-    color: #ffffff !important;
-    text-shadow: 0 0 8px rgba(255, 77, 77, 0.6) !important;
+/* 3. 標題與內文 (BBC News 黑白紅配色) */
+.post-title {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 1.2rem !important;
+    font-weight: 700 !important;
+    margin: 0 0 8px 0 !important;
+
+    a {
+        color: #ffffff !important; // 標題改為白色 (BBC Style)
+        text-decoration: none !important;
+        &:hover {
+            color: #ff4d4d !important; // Hover 才變紅，增加互動感
+            text-decoration: underline !important;
+        }
+    }
 }
 
-/* 3. 強制隱藏 Anonymous 與日期 */
-// 確保 meta 資訊乾淨，只保留閱讀時間等
-.post-meta-author, 
-.post-author,
-.post-meta-publish,
-.post-publish,
-.post-meta-date,
-.archive-item-date {
+// 模仿 BBC 的文章摘要顏色
+.post-content, .archive-item-description {
+    font-size: 0.95rem !important;
+    color: #cccccc !important;
+    line-height: 1.4 !important;
+    display: -webkit-box;
+    -webkit-line-clamp: 3; // 限制摘要顯示 3 行，保持格子整齊
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* 4. Meta 資訊修正 (BBC 灰色小字) */
+.post-meta {
+    font-size: 0.8rem !important;
+    color: #888 !important;
+    margin-top: 10px !important;
+    
+    // 隱藏不需要的圖標
+    .far, .fas { display: none !important; }
+}
+
+/* 5. 強制隱藏不需要的元素 (保持 BBC 簡約感) */
+.post-meta-author, .post-author, .post-publish, .post-meta-date {
     display: none !important;
 }
 
-.post-meta {
-    color: #888888 !important; 
-}
-
-/* 4. 目錄 (TOC) 與連結優化 */
-#TableOfContents {
-    a {
-        color: #3498db !important;
-        &:hover {
-            color: #ffffff !important;
-        }
-    }
-    .active {
-        color: #ff4d4d !important;
-    }
-}
-
-/* 5. 修正首頁 profile 文字 */
-.home-profile .home-title {
-    color: #ffffff !important;
-}
-
-.home-profile .home-subtitle {
-    color: #aaaaaa !important; 
-}
-
-/* 6. 文章內文顏色強化 */
-.post-content {
-    color: #ffffff !important;
-    // 確保內文入面嘅連結唔會變咗灰色
-    a {
-        color: #3498db !important;
-        &:hover {
-            color: #ff4d4d !important;
-        }
-    }
+// 底部「Read More」改為藍色或隱藏
+.read-more {
+    display: none !important; // BBC 通常直接點標題，唔需要 Read More 字眼
 }
