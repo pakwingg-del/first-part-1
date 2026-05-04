@@ -12,10 +12,19 @@ body {
         content: "";
         position: fixed;
         top: 0; left: 0; width: 100%; height: 100%;
-        background: rgba(0, 0, 0, 0.85) !important; 
+        background: radial-gradient(circle, rgba(10, 10, 15, 0.4) 0%, rgba(0, 0, 0, 0.75) 100%) !important; 
         z-index: -1;
     }
 }
+
+/* 額外小優化：幫卡片加一點點毛玻璃感，配合背景圖 */
+article.summary, article.archive-item, .home article {
+    background: rgba(20, 20, 20, 0.7) !important; // 半透明黑
+    backdrop-filter: blur(5px); // 毛玻璃效果，背景圖經過卡片時會有高級感
+    border-top: 3px solid #ff4d4d !important;
+    // ... 其他保持不變 ...
+}
+
 
 /* 2. 徹底消除右邊虛線與分隔線 */
 // 針對 FixIt 主題各種可能產生虛線的元素進行爆破

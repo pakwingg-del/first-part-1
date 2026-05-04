@@ -17,7 +17,7 @@ paginate = 15
     [params.header]
         fixed = true
         [params.header.title]
-            name = "🔥 Viral News Network" 
+            name = "VIRAL NEWS NETWORK"
             logo = ""                     
             pre = ""                      
             post = ""                     
@@ -25,8 +25,8 @@ paginate = 15
     # FixIt 專用首頁 Profile 設定
     [params.home.profile]
         enable = true
-        title = "Live Trends Center" 
-        subtitle = "Get your hourly dose of globally validated viral content here."
+        title = "VIRAL NEWS NETWORK" 
+        subtitle = "Global Trending Data Matrix"
         typeit = true
         social = true
 
