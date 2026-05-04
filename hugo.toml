@@ -4,7 +4,7 @@ title = 'VNN | Viral News Network' # SEO 優化：加上縮寫，更專業
 theme = "FixIt"
 
 # 每頁顯示 10 篇 (保留你的設定，過大會影響載入速度)
-paginate = 10
+paginate = 15
 
 [params]
     env = "production"

@@ -1,5 +1,5 @@
 // ==========================================
-// Viral News Network - 萬用版 3 欄網格 & 爆料紅
+// Viral News Network - 3-Column Clean Grid
 // ==========================================
 
 /* 1. 背景與遮罩 (保持穩定) */
@@ -17,45 +17,56 @@ body {
     }
 }
 
-/* 2. 【核彈級】強制 3 欄網格 */
-// 無視 FixIt 容器名稱，直接針對首頁排版
+/* 2. 徹底消除右邊虛線與分隔線 */
+// 針對 FixIt 主題各種可能產生虛線的元素進行爆破
+hr, 
+.post-divider, 
+.summary::after, 
+.archive-item::after,
+.post::after {
+    display: none !important;
+    border: none !important;
+    height: 0 !important;
+    visibility: hidden !important;
+}
+
+/* 3. 【核彈級】強制 3 欄網格排版 */
 .page.home {
     display: flex !important;
     flex-wrap: wrap !important;
-    justify-content: space-between !important;
+    justify-content: flex-start !important; // 改為左對齊，配合 gap 避免跑位
 }
 
-// 確保頂部 Profile (打字機) 霸佔全行，唔會跌入網格
 .home-profile {
     width: 100% !important;
     flex: 0 0 100% !important;
     margin-bottom: 40px !important;
 }
 
-// 如果有 .posts 容器，解除佢嘅限制
 .page.home .posts, .home-posts {
     display: flex !important;
     flex-wrap: wrap !important;
-    gap: 2% !important; 
+    gap: 1.5% !important; // 稍微縮減間距，確保 3 欄空間充足
     width: 100% !important;
 }
 
-// 針對所有文章卡片 (格仔本體)
+// 針對文章卡片本體
 article.summary, article.archive-item, .home article {
-    width: 32% !important; // 強制 3 欄 (留 2% 空間做 gap)
-    background: rgba(255, 255, 255, 0.05) !important; // 深灰底色卡片
-    border-top: 3px solid #ff4d4d !important; // BBC 風格頂部紅線
-    padding: 20px !important;
+    width: 32.3% !important; // 精確計算 3 欄 (32.3*3 + 1.5*2 接近 100%)
+    background: rgba(255, 255, 255, 0.05) !important;
+    border-top: 3px solid #ff4d4d !important; // 頂部爆料紅線
+    border-bottom: none !important; // 確保底部冇線
+    padding: 25px !important;
     margin-bottom: 25px !important;
     box-sizing: border-box !important;
     border-radius: 4px !important;
+    position: relative !important; // 避免偽元素溢出
 
-    @media (max-width: 991px) { width: 48% !important; } // 平板 2 欄
-    @media (max-width: 767px) { width: 100% !important; } // 手機 1 欄
+    @media (max-width: 991px) { width: 49% !important; }
+    @media (max-width: 767px) { width: 100% !important; }
 }
 
-/* 3. 【核彈級】標題配色：強制紅色 */
-// 針對文章內所有連結、H1、H2
+/* 4. 標題配色與摘要限制 (保持爆料紅) */
 article.summary h1 a, article.summary h2 a, 
 article.archive-item h1 a, article.archive-item h2 a,
 .summary-title a, .post-title a, .archive-item-link {
@@ -70,18 +81,17 @@ article.archive-item h1 a, article.archive-item h2 a,
     &:hover { color: #ffffff !important; }
 }
 
-/* 4. 內容摘要限制 */
 .summary-content, .post-content, .archive-item-description {
     color: #cccccc !important;
     font-size: 0.95rem !important;
     line-height: 1.5 !important;
     display: -webkit-box !important;
-    -webkit-line-clamp: 4 !important; // 鎖死 4 行
+    -webkit-line-clamp: 4 !important; 
     -webkit-box-orient: vertical !important;
     overflow: hidden !important;
 }
 
-/* 5. 徹底隱藏不需要的雜訊 */
+/* 5. 徹底隱藏雜訊 */
 .post-meta, .post-footer, .post-meta-author, .post-publish, .read-more {
     display: none !important;
 }
