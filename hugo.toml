@@ -3,17 +3,17 @@ languageCode = 'en-us'
 title = 'VNN | Viral News Network' # SEO 優化：加上縮寫，更專業
 theme = "FixIt"
 
-# 每頁顯示 10 篇 (保留你的設定，過大會影響載入速度)
+# 全域分頁設定 (控制 /posts/ 頁面)
 paginate = 15
 
 [params]
     env = "production"
     defaultTheme = "dark" # 強制深色底，視覺衝擊力強
     
-    # 【SEO 優化】網站預設描述：更權威、更具資訊量
+    # 【SEO 優化】網站預設描述
     description = "24/7 Live Global Trending News Network. Your essential source for viral content, exclusive insights, and breaking stories."
     
-    # Header 設定 (保留你之前的修正)
+    # Header 設定
     [params.header]
         fixed = true
         [params.header.title]
@@ -22,27 +22,32 @@ paginate = 15
             pre = ""                      
             post = ""                     
 
-    # FixIt 專用首頁設定 (保留 TypeIt，改為 PRO 風格描述)
+    # FixIt 專用首頁 Profile 設定
     [params.home.profile]
         enable = true
-        title = "Live Trends Center" # 改為更有權威感的標題
-        subtitle = "Get your hourly dose of globally validated viral content here." # 改為專業描述
+        title = "Live Trends Center" 
+        subtitle = "Get your hourly dose of globally validated viral content here."
         typeit = true
         social = true
 
-    # SEO 強化設定 (萬金油封面圖：PNG/JPG 皆可，確保圖片存在)
+    # 【關鍵修正】強制首頁顯示 15 篇，達成 3x5 網格
+    [params.home.posts]
+        enable = true
+        paginate = 15
+
+    # SEO 強化設定
     [params.seo]
         image = "/images/default-viral-cover.png"
         thumbnail = "/images/default-viral-cover.png"
         schema = true
 
-    # 文章列表佈局設定 (極致簡約化，關閉 widget)
+    # 文章列表佈局設定
     [params.section]
         layout = "compact"
-        enableWidget = false # 關閉側邊欄 widget，專注在文章標題上
+        enableWidget = false # 關閉側邊欄，專注在網格標題上
         enableWidgetMobile = false
 
-    # Footer 設定 (Optional: 加入版權聲明，增加合法感)
+    # Footer 設定
     [params.footer]
         enable = true
         copyright = true
@@ -51,7 +56,7 @@ paginate = 15
 [menu]
     [[menu.main]]
         identifier = "posts"
-        name = "Trending Now" # 改為更緊急的名稱
+        name = "Trending Now" 
         url = "/posts/"
         weight = 10
 
@@ -60,7 +65,7 @@ paginate = 15
     [content.posts]
         path = "content/posts"
 
-# 永久連結優化：保留日期結構，Google 爬蟲非常鍾意
+# 永久連結優化：Google 爬蟲最鍾意嘅日期結構
 [permalinks]
     posts = "/:year/:month/:day/:contentbasename/"
 
