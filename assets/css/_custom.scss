@@ -1,8 +1,8 @@
 // ==========================================
-// Viral News Network - BBC Grid Style Layout
+// Viral News Network - 3-Column Grid & Red Title
 // ==========================================
 
-/* 1. 核心背景與遮罩 (保持不變) */
+/* 1. 背景與遮罩 (穩定版) */
 body {
     background-image: url("/images/news-bg.png");
     background-attachment: fixed; 
@@ -17,72 +17,73 @@ body {
     }
 }
 
-/* 2. BBC 網格化設定 (首頁文章清單) */
-.home, .posts {
-    .content {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 20px; // 格與格之間的距離
-        justify-content: space-between;
-    }
-
-    // 每一格文章的寬度 (模仿 BBC 一排兩格或三格)
-    article.archive-item, article.single {
-        flex: 0 0 calc(48% - 10px); // 一排兩格
-        margin-bottom: 20px !important;
-        padding-bottom: 15px !important;
-        border-bottom: 1px solid #333 !important; // BBC 標誌性的分隔線
-        
-        @media (max-width: 768px) {
-            flex: 0 0 100%; // 手機版變回一排一格
-        }
-    }
+/* 2. 強制 3 欄網格 (Grid Layout) */
+// 針對 FixIt 的文章列表容器進行強制排版
+.home-posts, .posts .content, .archive-item {
+    display: block; // 先重置預設行為
 }
 
-/* 3. 標題與內文 (BBC News 黑白紅配色) */
-.post-title {
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 1.2rem !important;
-    font-weight: 700 !important;
-    margin: 0 0 8px 0 !important;
+#content .container .home {
+    max-width: 1200px !important;
+}
 
-    a {
-        color: #ffffff !important; // 標題改為白色 (BBC Style)
-        text-decoration: none !important;
-        &:hover {
-            color: #ff4d4d !important; // Hover 才變紅，增加互動感
-            text-decoration: underline !important;
-        }
+// 這是核心：將文章容器變為 Grid
+.home-posts {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important; // 強制 3 欄
+    gap: 25px !important; // 格子間距
+    padding: 20px 0 !important;
+
+    @media (max-width: 991px) {
+        grid-template-columns: repeat(2, 1fr) !important; // 平板變 2 欄
+    }
+    @media (max-width: 767px) {
+        grid-template-columns: 1fr !important; // 手機變 1 欄
     }
 }
 
-// 模仿 BBC 的文章摘要顏色
-.post-content, .archive-item-description {
-    font-size: 0.95rem !important;
-    color: #cccccc !important;
-    line-height: 1.4 !important;
-    display: -webkit-box;
-    -webkit-line-clamp: 3; // 限制摘要顯示 3 行，保持格子整齊
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+// 每一格文章的樣式
+article.archive-item {
+    background: rgba(255, 255, 255, 0.03); // 極淡背景增加格質感
+    padding: 15px !important;
+    border-bottom: 2px solid #333 !important; // 底部幼線
+    display: flex;
+    flex-direction: column;
 }
 
-/* 4. Meta 資訊修正 (BBC 灰色小字) */
-.post-meta {
-    font-size: 0.8rem !important;
-    color: #888 !important;
-    margin-top: 10px !important;
+/* 3. 【奪權級】標題配色：強制紅色 */
+// 解決 image_12.png 入面標題仲係灰色嘅問題
+.post-title, 
+.post-title a, 
+.archive-item-link {
+    color: #ff4d4d !important; // 鮮紅色
+    font-size: 1.15rem !important;
+    font-weight: 800 !important;
+    text-decoration: none !important;
+    line-height: 1.3 !important;
+    margin-bottom: 10px !important;
     
-    // 隱藏不需要的圖標
-    .far, .fas { display: none !important; }
+    &:hover {
+        color: #ffffff !important;
+        text-decoration: underline !important;
+    }
 }
 
-/* 5. 強制隱藏不需要的元素 (保持 BBC 簡約感) */
-.post-meta-author, .post-author, .post-publish, .post-meta-date {
+/* 4. 內容摘要：限制行數保持整齊 */
+.post-content, .archive-item-description {
+    color: #bbbbbb !important;
+    font-size: 0.9rem !important;
+    line-height: 1.5 !important;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 4; // 限制顯示 4 行，確保 3x4 佈局整齊
+    -webkit-box-orient: vertical;
+}
+
+/* 5. 隱藏不必要的組件 */
+.post-meta, .post-footer, .post-meta-author, .post-publish, .read-more {
     display: none !important;
 }
 
-// 底部「Read More」改為藍色或隱藏
-.read-more {
-    display: none !important; // BBC 通常直接點標題，唔需要 Read More 字眼
-}
+// 修正分隔線問題
+.post-title::after { display: none !important; }
