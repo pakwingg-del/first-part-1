@@ -1,13 +1,13 @@
 // ==========================================
-// Viral News Network - 3-Column Grid & Red Title
+// Viral News Network - 萬用版 3 欄網格 & 爆料紅
 // ==========================================
 
-/* 1. 背景與遮罩 (穩定版) */
+/* 1. 背景與遮罩 (保持穩定) */
 body {
-    background-image: url("/images/news-bg.png");
-    background-attachment: fixed; 
-    background-size: cover;        
-    background-position: center;
+    background-image: url("/images/news-bg.png") !important;
+    background-attachment: fixed !important; 
+    background-size: cover !important;        
+    background-position: center !important;
     &::before {
         content: "";
         position: fixed;
@@ -17,73 +17,71 @@ body {
     }
 }
 
-/* 2. 強制 3 欄網格 (Grid Layout) */
-// 針對 FixIt 的文章列表容器進行強制排版
-.home-posts, .posts .content, .archive-item {
-    display: block; // 先重置預設行為
+/* 2. 【核彈級】強制 3 欄網格 */
+// 無視 FixIt 容器名稱，直接針對首頁排版
+.page.home {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: space-between !important;
 }
 
-#content .container .home {
-    max-width: 1200px !important;
+// 確保頂部 Profile (打字機) 霸佔全行，唔會跌入網格
+.home-profile {
+    width: 100% !important;
+    flex: 0 0 100% !important;
+    margin-bottom: 40px !important;
 }
 
-// 這是核心：將文章容器變為 Grid
-.home-posts {
-    display: grid !important;
-    grid-template-columns: repeat(3, 1fr) !important; // 強制 3 欄
-    gap: 25px !important; // 格子間距
-    padding: 20px 0 !important;
-
-    @media (max-width: 991px) {
-        grid-template-columns: repeat(2, 1fr) !important; // 平板變 2 欄
-    }
-    @media (max-width: 767px) {
-        grid-template-columns: 1fr !important; // 手機變 1 欄
-    }
+// 如果有 .posts 容器，解除佢嘅限制
+.page.home .posts, .home-posts {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 2% !important; 
+    width: 100% !important;
 }
 
-// 每一格文章的樣式
-article.archive-item {
-    background: rgba(255, 255, 255, 0.03); // 極淡背景增加格質感
-    padding: 15px !important;
-    border-bottom: 2px solid #333 !important; // 底部幼線
-    display: flex;
-    flex-direction: column;
+// 針對所有文章卡片 (格仔本體)
+article.summary, article.archive-item, .home article {
+    width: 32% !important; // 強制 3 欄 (留 2% 空間做 gap)
+    background: rgba(255, 255, 255, 0.05) !important; // 深灰底色卡片
+    border-top: 3px solid #ff4d4d !important; // BBC 風格頂部紅線
+    padding: 20px !important;
+    margin-bottom: 25px !important;
+    box-sizing: border-box !important;
+    border-radius: 4px !important;
+
+    @media (max-width: 991px) { width: 48% !important; } // 平板 2 欄
+    @media (max-width: 767px) { width: 100% !important; } // 手機 1 欄
 }
 
-/* 3. 【奪權級】標題配色：強制紅色 */
-// 解決 image_12.png 入面標題仲係灰色嘅問題
-.post-title, 
-.post-title a, 
-.archive-item-link {
-    color: #ff4d4d !important; // 鮮紅色
-    font-size: 1.15rem !important;
+/* 3. 【核彈級】標題配色：強制紅色 */
+// 針對文章內所有連結、H1、H2
+article.summary h1 a, article.summary h2 a, 
+article.archive-item h1 a, article.archive-item h2 a,
+.summary-title a, .post-title a, .archive-item-link {
+    color: #ff4d4d !important; 
+    font-size: 1.25rem !important;
     font-weight: 800 !important;
     text-decoration: none !important;
     line-height: 1.3 !important;
-    margin-bottom: 10px !important;
+    display: block !important;
+    margin-bottom: 12px !important;
     
-    &:hover {
-        color: #ffffff !important;
-        text-decoration: underline !important;
-    }
+    &:hover { color: #ffffff !important; }
 }
 
-/* 4. 內容摘要：限制行數保持整齊 */
-.post-content, .archive-item-description {
-    color: #bbbbbb !important;
-    font-size: 0.9rem !important;
+/* 4. 內容摘要限制 */
+.summary-content, .post-content, .archive-item-description {
+    color: #cccccc !important;
+    font-size: 0.95rem !important;
     line-height: 1.5 !important;
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-line-clamp: 4; // 限制顯示 4 行，確保 3x4 佈局整齊
-    -webkit-box-orient: vertical;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 4 !important; // 鎖死 4 行
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
 }
 
-/* 5. 隱藏不必要的組件 */
+/* 5. 徹底隱藏不需要的雜訊 */
 .post-meta, .post-footer, .post-meta-author, .post-publish, .read-more {
     display: none !important;
 }
-
-// 修正分隔線問題
-.post-title::after { display: none !important; }
