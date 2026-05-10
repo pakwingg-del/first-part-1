@@ -1,20 +1,21 @@
 // ==========================================
-// Viral News Network - Ultimate Matrix Edition
+// Viral News Network - Final Matrix Master
 // ==========================================
 
-/* 1. 全域背景與進階遮罩 */
+/* 1. 全域背景、進階遮罩與字體統一 */
 body {
     background-image: url("/images/news-bg.png") !important;
     background-attachment: fixed !important; 
     background-size: cover !important;        
     background-position: center !important;
     background-color: #000 !important;
+    // 關鍵：換成無襯線字體，增加現代新聞台的硬朗感
+    font-family: "Inter", "Helvetica Neue", Arial, -apple-system, sans-serif !important;
     
     &::before {
         content: "";
         position: fixed;
         top: 0; left: 0; width: 100%; height: 100%;
-        // 徑向漸變遮罩：中心較透，邊緣較深，營造監控螢幕感
         background: radial-gradient(circle, rgba(10, 10, 15, 0.4) 0%, rgba(0, 0, 0, 0.8) 100%) !important;
         z-index: -1;
     }
@@ -28,63 +29,59 @@ body {
 }
 
 /* 3. 徹底消除虛線、分隔線與 RSS 雜訊 */
-hr, 
-.post-divider, 
-.summary::after, 
-.archive-item::after,
-.post::after,
-.rss-link, 
-.fa-rss {
+hr, .post-divider, .summary::after, .archive-item::after,
+.post::after, .rss-link, .fa-rss, .post-meta, .post-footer, .read-more {
     display: none !important;
     border: none !important;
     height: 0 !important;
     visibility: hidden !important;
 }
 
-/* 4. 核彈級 3 欄網格與卡片優化 */
+/* 4. 核彈級 3 欄網格與卡片佈局 */
 .page.home {
     display: flex !important;
     flex-wrap: wrap !important;
-    justify-content: flex-start !important;
+    justify-content: center !important; // 居中對齊讓間距更平均
 }
 
 .home-profile {
     width: 100% !important;
     flex: 0 0 100% !important;
-    margin-bottom: 50px !important; // 加大標題與內容間距
+    margin-bottom: 50px !important;
 }
 
 .page.home .posts, .home-posts {
     display: flex !important;
     flex-wrap: wrap !important;
-    gap: 1.5% !important; 
+    gap: 20px !important; // 使用固定像素 gap，更容易控制對齊
     width: 100% !important;
+    max-width: 1300px; // 限制最大寬度避免過寬導致標題變形
+    margin: 0 auto !important;
 }
 
-// 文章卡片本體：加入毛玻璃與動畫
+// 文章卡片本體
 article.summary, article.archive-item, .home article {
-    width: 32.3% !important; 
+    // 鎖定寬度計算，減去 gap
+    flex: 0 0 calc(33.33% - 14px) !important; 
     background: rgba(20, 20, 20, 0.75) !important; 
-    backdrop-filter: blur(8px); // 毛玻璃質感
+    backdrop-filter: blur(8px);
     border-top: 3px solid #ff4d4d !important; 
-    border-bottom: none !important;
-    padding: 28px !important; // 加大內距增加呼吸感
-    margin-bottom: 25px !important;
+    padding: 28px !important; 
+    margin-bottom: 5px !important;
     box-sizing: border-box !important;
     border-radius: 4px !important;
-    position: relative !important;
     transition: transform 0.3s ease, box-shadow 0.3s ease !important;
 
     &:hover {
-        transform: translateY(-5px); // 輕微浮起感
+        transform: translateY(-5px);
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5) !important;
     }
 
-    @media (max-width: 991px) { width: 49% !important; }
-    @media (max-width: 767px) { width: 100% !important; }
+    @media (max-width: 991px) { flex: 0 0 calc(50% - 10px) !important; }
+    @media (max-width: 767px) { flex: 0 0 100% !important; }
 }
 
-/* 5. 標題與內容 (強化對比與層次) */
+/* 5. 標題鎖定 (解決高度不一導致對不齊的問題) */
 article.summary h1 a, article.summary h2 a, 
 article.archive-item h1 a, article.archive-item h2 a,
 .summary-title a, .post-title a, .archive-item-link {
@@ -93,29 +90,29 @@ article.archive-item h1 a, article.archive-item h2 a,
     font-weight: 800 !important;
     text-decoration: none !important;
     line-height: 1.3 !important;
-    display: block !important;
-    margin-bottom: 18px !important; // 增加標題與摘要間距
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important; // 強制標題最多兩行，維持陣列整齊
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+    min-height: 3.2rem !important; // 鎖定最小高度
+    margin-bottom: 18px !important;
     transition: all 0.3s ease !important;
     
     &:hover { 
         color: #ffffff !important; 
-        text-shadow: 0 0 10px rgba(255, 77, 77, 0.8) !important; // 紅色發光特效
+        text-shadow: 0 0 10px rgba(255, 77, 77, 0.8) !important;
     }
 }
 
+/* 6. 內容摘要微調 */
 .summary-content, .post-content, .archive-item-description {
-    color: #999999 !important; // 調淡摘要，讓紅色標題更突出
-    font-size: 0.95rem !important;
-    line-height: 1.6 !important; // 加大行高提升閱讀舒服度
-    letter-spacing: 0.02em !important;
+    color: #999999 !important;
+    font-size: 0.9rem !important;
+    line-height: 1.6 !important;
+    letter-spacing: 0.01em !important;
     font-weight: 300 !important;
     display: -webkit-box !important;
-    -webkit-line-clamp: 4 !important; 
+    -webkit-line-clamp: 5 !important; // 摘要長度適中
     -webkit-box-orient: vertical !important;
     overflow: hidden !important;
-}
-
-/* 6. 徹底隱藏後台中繼資料 */
-.post-meta, .post-footer, .post-meta-author, .post-publish, .read-more {
-    display: none !important;
 }
