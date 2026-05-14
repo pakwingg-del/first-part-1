@@ -1,7 +1,7 @@
 name: Hourly Content
 on:
   schedule:
-    - cron: '45 * * * *' # 每小時第 45 分鐘執行
+    - cron: '37 0-7,12-23 * * *' # 每小時第 45 分鐘執行
   workflow_dispatch:
 jobs:
   run:
