@@ -1,8 +1,11 @@
 name: Hourly Content Matrix
 
 on:
-  # 刪除 schedule，全面改用 API 觸發
   workflow_dispatch: 
+
+# 加入環境變量，解決日誌入面的 Deprecation Warning
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   run:
@@ -31,7 +34,17 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          # 確保呢度 add 嘅檔名同 generator.py 輸出一致
+          
+          # 1. 加入生成的 JSON 檔案
           git add matrix_articles.json
-          git commit -m "Update viral news matrix: 600 articles generated via API" || exit 0
-          git push
+          
+          # 2. 檢查是否有檔案變動，有才 commit
+          if git diff --staged --quiet; then
+            echo "No changes to commit, skipping push."
+          else
+            git commit -m "Update viral news matrix: 600 articles generated via API"
+            
+            # 3. 先 pull 一下確保冇 conflict，然後再 push
+            git pull --rebase origin main
+            git push origin main
+          fi
