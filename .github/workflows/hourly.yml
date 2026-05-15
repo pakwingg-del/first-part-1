@@ -1,9 +1,8 @@
 name: Hourly Content Matrix
 
 on:
-  schedule:
-    - cron: '37 0-7,12-23 * * *' # 備用排程
-  workflow_dispatch: # 呢行係比 Cron-job.org Call 入嚟嘅門口
+  # 刪除 schedule，全面改用 API 觸發
+  workflow_dispatch: 
 
 jobs:
   run:
@@ -25,14 +24,14 @@ jobs:
       - name: Generate Content Matrix
         env:
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
-          REPO_INDEX: 0 # 你原本留低嘅註解，保持不變
+          REPO_INDEX: 0
         run: python generator.py
 
       - name: Commit and Push Matrix Data
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          # 關鍵修正：add 我哋 generator.py 產生嘅 json 檔
+          # 確保呢度 add 嘅檔名同 generator.py 輸出一致
           git add matrix_articles.json
-          git commit -m "Update viral news matrix: 600 articles generated" || exit 0
+          git commit -m "Update viral news matrix: 600 articles generated via API" || exit 0
           git push
