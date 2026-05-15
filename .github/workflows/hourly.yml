@@ -1,8 +1,10 @@
-name: Hourly Content
+name: Hourly Content Matrix
+
 on:
   schedule:
-    - cron: '37 0-7,12-23 * * *' # 每小時第 45 分鐘執行
-  workflow_dispatch:
+    - cron: '37 0-7,12-23 * * *' # 備用排程
+  workflow_dispatch: # 呢行係比 Cron-job.org Call 入嚟嘅門口
+
 jobs:
   run:
     runs-on: ubuntu-latest
@@ -11,21 +13,26 @@ jobs:
         with:
           submodules: true
           fetch-depth: 0
+
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.10'
-      - name: Install
+
+      - name: Install Dependencies
         run: pip install requests openai
-      - name: Gen
+
+      - name: Generate Content Matrix
         env:
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
-          REPO_INDEX: 0 # 第二個 Repo 記得改做 1
+          REPO_INDEX: 0 # 你原本留低嘅註解，保持不變
         run: python generator.py
-      - name: Push
+
+      - name: Commit and Push Matrix Data
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add content/posts/
-          git commit -m "Add hourly viral posts" || exit 0
+          # 關鍵修正：add 我哋 generator.py 產生嘅 json 檔
+          git add matrix_articles.json
+          git commit -m "Update viral news matrix: 600 articles generated" || exit 0
           git push
