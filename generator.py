@@ -3,14 +3,15 @@ import os
 import time
 import requests
 from openai import OpenAI
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
-# 1. API 配置 - 使用 GitHub Secrets 中的 DEEPSEEK_API_KEY
+# 1. API 配置
 client = OpenAI(
     api_key=os.getenv("DEEPSEEK_API_KEY"), 
     base_url="https://api.deepseek.com"
 )
 
-# 2. 定義 20 個細分的人格，確保內容多樣性，對沖 SEO 重複風險
+# 2. 完整保留你原本的 20 個人格矩陣
 PERSONA_MATRIX = [
     # A. 爆料組 (Sensationalist)
     "Tabloid journalist, use heavy ALL CAPS, dramatic 'JUST IN' hooks, and suspenseful language.",
@@ -39,8 +40,36 @@ PERSONA_MATRIX = [
     "Moral critic, discussing the ethical implications and the 'downfall of society' angle."
 ]
 
+def fetch_single_article(persona_tuple, seed, last_updated):
+    round_idx, current_persona = persona_tuple
+    query = seed['query']
+    
+    try:
+        completion = client.chat.completions.create(
+            model="deepseek-chat",
+            messages=[
+                {"role": "system", "content": f"You are a: {current_persona}. Write a unique viral news snippet."},
+                {"role": "user", "content": f"Topic: {query}"},
+            ],
+            max_tokens=400,
+            temperature=1.0 
+        )
+        content = completion.choices[0].message.content
+        
+        return {
+            "keyword": query,
+            "persona_id": round_idx + 1,
+            "persona_type": current_persona.split(',')[0],
+            "title": content.split('\n')[0].replace('#', '').strip(),
+            "body": content,
+            "source_volume": seed.get("search_volume"),
+            "generated_at": last_updated
+        }
+    except Exception as e:
+        print(f"⚠️ Error with {query} (Round {round_idx+1}): {e}")
+        return None
+
 def generate_matrix():
-    # 3. 從 Trends-Hub 抓取最新藍圖 (Blueprint)
     trends_url = "https://raw.githubusercontent.com/pakwingg-del/Trends-Hub/main/master_trends.json"
     print(f"📡 Fetching latest seeds from Trends-Hub...")
     
@@ -48,57 +77,34 @@ def generate_matrix():
         response = requests.get(trends_url)
         response.raise_for_status()
         data = response.json()
-        seeds = data.get("trending_seeds", [])[:30] # 嚴格執行 Top 30 策略
+        seeds = data.get("trending_seeds", [])[:30]
+        last_updated = data["matrix_metadata"]["last_updated_hkt"]
     except Exception as e:
         print(f"❌ Error fetching trends: {e}")
         return
 
     all_articles = []
-
-    # 4. 核心矩陣生成邏輯：20 Rounds x 30 Topics = 600 Articles
-    for round_idx in range(20):
-        current_persona = PERSONA_MATRIX[round_idx]
-        print(f"🌀 ROUND {round_idx + 1}/20 | Persona: {current_persona[:40]}...")
-
-        for seed in seeds:
-            query = seed['query']
+    
+    # 使用 ThreadPoolExecutor 同時處理請求，設定 5 個 Worker (線程)
+    # 咁樣 600 個 Request 會分批並行，唔使逐個等
+    print(f"🚀 Starting Parallel Generation (600 tasks) with 5 workers...")
+    
+    tasks = []
+    with ThreadPoolExecutor(max_workers=5) as executor:
+        for round_idx, persona in enumerate(PERSONA_MATRIX):
+            for seed in seeds:
+                tasks.append(executor.submit(fetch_single_article, (round_idx, persona), seed, last_updated))
+        
+        completed_count = 0
+        for future in as_completed(tasks):
+            result = future.result()
+            if result:
+                all_articles.append(result)
             
-            try:
-                # 呼叫 DeepSeek-V3
-                completion = client.chat.completions.create(
-                    model="deepseek-chat",
-                    messages=[
-                        {"role": "system", "content": f"You are a: {current_persona}. Write a unique viral news snippet."},
-                        {"role": "user", "content": f"Topic: {query}"},
-                    ],
-                    max_tokens=400,
-                    temperature=1.0 # 提高隨機性，確保即使人格相似內容也不同
-                )
-                
-                content = completion.choices[0].message.content
-                
-                all_articles.append({
-                    "keyword": query,
-                    "persona_id": round_idx + 1,
-                    "persona_type": current_persona.split(',')[0], # 記錄人格類型
-                    "title": content.split('\n')[0].replace('#', '').strip(),
-                    "body": content,
-                    "source_volume": seed.get("search_volume"),
-                    "generated_at": data["matrix_metadata"]["last_updated_hkt"]
-                })
-                
-                # 短暫延遲：每秒約 2 個 Request，保護 API RPM
-                time.sleep(0.5)
-                
-            except Exception as e:
-                print(f"⚠️ Skipping {query} due to error: {e}")
-                continue
+            completed_count += 1
+            if completed_count % 50 == 0:
+                print(f"📦 Progress: {completed_count}/600 articles generated...")
 
-        # 每完成一個 Round (30篇) 大休息，防止 Actions 逾時或 API 過熱
-        print(f"✅ Round {round_idx + 1} finished. Total so far: {len(all_articles)}")
-        time.sleep(10)
-
-    # 5. 儲存成品
     output_file = "matrix_articles.json"
     with open(output_file, "w", encoding="utf-8") as f:
         json.dump(all_articles, f, indent=2, ensure_ascii=False)
