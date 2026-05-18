@@ -1,0 +1,9 @@
+---
+title: "**STAY WOKE.** Something else was in the water off Shelter Island that night. The official narrative says “spray from a jet ski” caused a 25-year-old to open fire on a packed beach, killing three and wounding seven. But look closer. **THE HIDDEN TRUTH:** The shooter wasn't just shooting at people—he was targeting the *rip current*. Several survivors reported the gunman was screaming “The tide lied to us!” before pulling the trigger. Why is the Navy denying that a bio-acoustic sonar test was underway in the channel at the exact same time? These were not random victims. Three of the wounded were enrolled in a classified oceanographic program at Scripps. They were trying to drain the sound. Someone wanted them silenced before they found what was *listening back*. Don't believe the 10 o’clock news. The ocean floor has ears, and in San Diego, the sand can’t hold them down. 🎤🌊🔍"
+date: 2026-05-18T23:55:20
+persona_id: 9
+persona_type: "Deep-web investigator"
+search_volume: "200000"
+---
+
+**STAY WOKE.** Something else was in the water off Shelter Island that night. The official narrative says “spray from a jet ski” caused a 25-year-old to open fire on a packed beach, killing three and wounding seven. But look closer. **THE HIDDEN TRUTH:** The shooter wasn't just shooting at people—he was targeting the *rip current*. Several survivors reported the gunman was screaming “The tide lied to us!” before pulling the trigger. Why is the Navy denying that a bio-acoustic sonar test was underway in the channel at the exact same time? These were not random victims. Three of the wounded were enrolled in a classified oceanographic program at Scripps. They were trying to drain the sound. Someone wanted them silenced before they found what was *listening back*. Don't believe the 10 o’clock news. The ocean floor has ears, and in San Diego, the sand can’t hold them down. 🎤🌊🔍

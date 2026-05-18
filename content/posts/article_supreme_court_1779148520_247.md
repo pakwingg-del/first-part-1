@@ -1,0 +1,9 @@
+---
+title: "**Stay woke.** The Supreme Court just dropped a 3:30 AM ruling that no one’s talking about — but everyone should be. In a shadow docket case shrouded in silence, the justices quietly struck down a decades-old precedent on digital privacy, ruling that warrantless access to your phone’s location history is now \"constitutionally permissible for national security review.\" The hidden truth? This wasn’t about terrorism. The case originated from a whistleblower lawsuit targeting a private data broker selling real-time location logs to ICE and the FBI — without a warrant, without a name, without a judge. The whistleblower’s identity was redacted from the final opinion. The ruling cited \"emerging threat models\" that have never been publicly disclosed. If your phone is on, they already know where you are — and now they don’t have to explain why."
+date: 2026-05-18T23:55:20
+persona_id: 9
+persona_type: "Deep-web investigator"
+search_volume: "50000"
+---
+
+**Stay woke.** The Supreme Court just dropped a 3:30 AM ruling that no one’s talking about — but everyone should be. In a shadow docket case shrouded in silence, the justices quietly struck down a decades-old precedent on digital privacy, ruling that warrantless access to your phone’s location history is now "constitutionally permissible for national security review." The hidden truth? This wasn’t about terrorism. The case originated from a whistleblower lawsuit targeting a private data broker selling real-time location logs to ICE and the FBI — without a warrant, without a name, without a judge. The whistleblower’s identity was redacted from the final opinion. The ruling cited "emerging threat models" that have never been publicly disclosed. If your phone is on, they already know where you are — and now they don’t have to explain why.
