@@ -2,6 +2,7 @@ import json
 import os
 import time
 import requests
+from datetime import datetime, timedelta
 from openai import OpenAI
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
@@ -57,6 +58,7 @@ def fetch_single_article(persona_tuple, seed, last_updated):
         content = completion.choices[0].message.content
         
         return {
+            # 保持 keyword 原貌供檔名轉換使用
             "keyword": query,
             "persona_id": round_idx + 1,
             "persona_type": current_persona.split(',')[0],
@@ -85,8 +87,6 @@ def generate_matrix():
 
     all_articles = []
     
-    # 使用 ThreadPoolExecutor 同時處理請求，設定 5 個 Worker (線程)
-    # 咁樣 600 個 Request 會分批並行，唔使逐個等
     print(f"🚀 Starting Parallel Generation (600 tasks) with 5 workers...")
     
     tasks = []
@@ -105,11 +105,63 @@ def generate_matrix():
             if completed_count % 50 == 0:
                 print(f"📦 Progress: {completed_count}/600 articles generated...")
 
-    output_file = "matrix_articles.json"
-    with open(output_file, "w", encoding="utf-8") as f:
-        json.dump(all_articles, f, indent=2, ensure_ascii=False)
+    # ====================================================
+    # 核心更改：Plan A 儲存與 30 天自動清理機制
+    # ====================================================
+    output_dir = "content/posts"
+    os.makedirs(output_dir, exist_ok=True)
+
+    # 1. 自動清理過期檔案 (大於 30 天)
+    print("🧹 Checking for expired articles (older than 30 days)...")
+    now = datetime.now()
+    retention_days = 30
+    deleted_count = 0
+
+    for file_name in os.listdir(output_dir):
+        if file_name.endswith(".md"):
+            file_path = os.path.join(output_dir, file_name)
+            file_time = datetime.fromtimestamp(os.path.getmtime(file_path))
+            
+            if now - file_time > timedelta(days=retention_days):
+                try:
+                    os.remove(file_path)
+                    deleted_count += 1
+                except Exception as e:
+                    print(f"⚠️ Failed to delete {file_name}: {e}")
+
+    if deleted_count > 0:
+        print(f"🗑️ Cleaned up {deleted_count} expired Markdown files.")
+    else:
+        print("✨ No expired articles found.")
+
+    # 2. 將 600 篇新文章分別寫入獨立的 .md 檔案
+    print(f"✍️ Writing {len(all_articles)} new Markdown files for Hugo...")
     
-    print(f"🏁 MISSION COMPLETE: {len(all_articles)} articles saved to {output_file}")
+    # 格式化 Hugo 所需的 Date 欄位 (e.g., 2026-05-19T06:00:00)
+    # 如果 last_updated 格式不支援，則 fallback 使用目前系統時間
+    try:
+        hugo_date = datetime.strptime(last_updated, "%Y-%m-%d %H:%M").strftime("%Y-%m-%dT%H:%M:%S")
+    except Exception:
+        hugo_date = datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
+
+    for idx, article in enumerate(all_articles):
+        # 移除非法字元，確保檔名安全
+        safe_keyword = "".join([c if c.isalnum() else "_" for c in article['keyword']])
+        timestamp = int(time.time())
+        file_name = f"{output_dir}/article_{safe_keyword}_{timestamp}_{idx}.md"
+        
+        with open(file_name, "w", encoding="utf-8") as f:
+            # 寫入 Hugo Front Matter 
+            f.write("---\n")
+            f.write(f"title: {json.dumps(article['title'], ensure_ascii=False)}\n") # 用 json.dumps 處理特殊符號與雙引號
+            f.write(f"date: {hugo_date}\n")
+            f.write(f"persona_id: {article['persona_id']}\n")
+            f.write(f"persona_type: {json.dumps(article['persona_type'], ensure_ascii=False)}\n")
+            f.write(f"search_volume: \"{article['source_volume']}\"\n")
+            f.write("---\n\n")
+            f.write(article['body'])
+            
+    print(f"🏁 MISSION COMPLETE: Saved to {output_dir}/")
 
 if __name__ == "__main__":
     generate_matrix()
