@@ -3,10 +3,8 @@ name: Hourly Content Matrix
 on:
   workflow_dispatch: 
 
-# --- 加入呢部分 ---
 permissions:
   contents: write  # 賦予寫入權限，等佢可以 push 檔案
-# ----------------
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
@@ -39,12 +37,13 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           
-          git add matrix_articles.json
+          # 核心修改：使用 -A 追蹤資料夾內的所有新增（Add）與過期刪除（Delete）
+          git add -A content/posts/
           
           if git diff --staged --quiet; then
             echo "No changes to commit, skipping push."
           else
-            git commit -m "Update viral news matrix: 600 articles generated via API"
+            git commit -m "Update viral news matrix: sync articles and clean expired posts"
             git pull --rebase origin main
             git push origin main
           fi
