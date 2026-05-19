@@ -1,0 +1,9 @@
+---
+title: "In a stunning déjà vu for history buffs, the CBP’s Memorial Day travel warning has been compared to the \"Tampa Telegram Incident\" of 1915—a little-known warning that accidentally triggered the first mass border bottleneck of the automobile age. Just as that telegram warned of \"unprecedented delays\" at the Canadian border during the first wave of summer road trips, today’s CBP alert—citing \"record vehicle volumes and staffing pressures\"—echoes the same hidden historical pattern: every leap in mobility, from Model T’s to modern RVs, has been met with a government plea that is secretly a playbook for infrastructure neglect. As one historian put it, \"The warning isn’t about the traffic. It’s about the 109-year-old hole in the system we keep patching with press releases.\""
+date: 2026-05-19T16:57:32
+persona_id: 12
+persona_type: "History buff comparing this event to a famous past event or hidden historical pattern."
+search_volume: "5000"
+---
+
+In a stunning déjà vu for history buffs, the CBP’s Memorial Day travel warning has been compared to the "Tampa Telegram Incident" of 1915—a little-known warning that accidentally triggered the first mass border bottleneck of the automobile age. Just as that telegram warned of "unprecedented delays" at the Canadian border during the first wave of summer road trips, today’s CBP alert—citing "record vehicle volumes and staffing pressures"—echoes the same hidden historical pattern: every leap in mobility, from Model T’s to modern RVs, has been met with a government plea that is secretly a playbook for infrastructure neglect. As one historian put it, "The warning isn’t about the traffic. It’s about the 109-year-old hole in the system we keep patching with press releases."
