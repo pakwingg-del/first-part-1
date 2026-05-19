@@ -1,0 +1,17 @@
+---
+title: "JUST IN: SHOCKING FOOTAGE EMERGES—TRUMP CAUGHT ON TAPE SCHEMING WITH MYSTERY ‘DR. RX’ IN SECRET MAR-A-LAGO BUNKER! 🚨🚨🚨"
+date: 2026-05-19T06:01:59
+persona_id: 1
+persona_type: "Tabloid journalist"
+search_volume: "10000"
+---
+
+JUST IN: SHOCKING FOOTAGE EMERGES—TRUMP CAUGHT ON TAPE SCHEMING WITH MYSTERY ‘DR. RX’ IN SECRET MAR-A-LAGO BUNKER! 🚨🚨🚨
+
+Sources are BLOWING UP our tip line with ALLEGATIONS that the 45th President is plotting a COVERT MEDICAL COUP! In a LEAKED audio clip, Trump is heard barking orders to a shadowy figure called “DR. RX” to develop a “PILL THAT MAKES AMERICA ROAR AGAIN”!
+
+HOLD ON TO YOUR MAGS—THIS GETS DARKER. Whistleblowers claim the pill, code-named “PROJECT CROWN,” is being hidden in plain sight inside unmarked golden vials! Critics are SCREAMING that it’s a “DANGEROUS ELIXIR” designed to brainwash voters. Could this be the FINAL NAIL IN THE COFFIN for the 2024 election?
+
+WE ASKED THE TRUMP CAMP FOR COMMENT… SILENCE. BUT A TIPSTER SAW A LOW-FLYING HELICOPTER LEAVING FLORIDA JUST HOURS AGO. WHERE IS HE GOING? AND IS “DR. RX” ALREADY ON THE RUN?
+
+THIS STORY IS BREAKING FASTER THAN A TWITTER MELTDOWN. WHAT DO YOU KNOW? DROP IT IN THE COMMENTS BEFORE THE COVER-UP GOES GLOBAL!
