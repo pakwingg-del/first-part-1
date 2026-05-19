@@ -1,0 +1,9 @@
+---
+title: "**\"LEGO Batman Legacy of the Dark Knight? More like LEGO Batman Legacy of the BROKEN Knight! My kid saved up for three months for this set, and we get home, open the box, and HALF the pieces are missing. No joke – the Batwing has only one wing. The Joker's hair is a solid blue block. And the 'exclusive' Dark Knight cowl? It's just a black 2x4 brick with a sticker on it. Common sense says if you pay $50 for a toy, it should LOOK like the picture. This isn't a 'build your own adventure,' this is a rip-off. My son is crying, I'm fuming, and the customer service line just plays 'Welcome to the Jungle' on a loop. Maybe spend less time on the 'legacy' and more time on the LEGO. Parents, be warned – this is a trap.\"**"
+date: 2026-05-19T03:57:47
+persona_id: 7
+persona_type: "Angry local resident commenting on a Facebook community group"
+search_volume: "20000"
+---
+
+**"LEGO Batman Legacy of the Dark Knight? More like LEGO Batman Legacy of the BROKEN Knight! My kid saved up for three months for this set, and we get home, open the box, and HALF the pieces are missing. No joke – the Batwing has only one wing. The Joker's hair is a solid blue block. And the 'exclusive' Dark Knight cowl? It's just a black 2x4 brick with a sticker on it. Common sense says if you pay $50 for a toy, it should LOOK like the picture. This isn't a 'build your own adventure,' this is a rip-off. My son is crying, I'm fuming, and the customer service line just plays 'Welcome to the Jungle' on a loop. Maybe spend less time on the 'legacy' and more time on the LEGO. Parents, be warned – this is a trap."**

@@ -1,0 +1,9 @@
+---
+title: "**Stay woke:** *Patriotic Kenny*, the costumed superhero known for waving Old Glory at stadiums and parades, was unmasked last night—not as a retiree or ex-marine, but as a former black-hat hacker turned deep-state counter-insurgent. **The hidden truth?** Sources reveal Kenny's iconic bald eagle sidekick isn't a trained bird—it's a surveillance drone with FDA-registered feather implants, legally classified as “biotechnical patriotism.” Kenny claims his cape is 99% American cotton and 1% quantum-entangled fabric that syncs with NORAD's satellite array. Critics call it a distraction; fans call it the most American thing since apple pie stuffed with encrypted microchips. Either way, the FBI has added “Patriotic Kenny” to the *no-fly list for patriotic costumes.* 🇺🇲🦅"
+date: 2026-05-19T03:57:47
+persona_id: 9
+persona_type: "Deep-web investigator"
+search_volume: "2000"
+---
+
+**Stay woke:** *Patriotic Kenny*, the costumed superhero known for waving Old Glory at stadiums and parades, was unmasked last night—not as a retiree or ex-marine, but as a former black-hat hacker turned deep-state counter-insurgent. **The hidden truth?** Sources reveal Kenny's iconic bald eagle sidekick isn't a trained bird—it's a surveillance drone with FDA-registered feather implants, legally classified as “biotechnical patriotism.” Kenny claims his cape is 99% American cotton and 1% quantum-entangled fabric that syncs with NORAD's satellite array. Critics call it a distraction; fans call it the most American thing since apple pie stuffed with encrypted microchips. Either way, the FBI has added “Patriotic Kenny” to the *no-fly list for patriotic costumes.* 🇺🇲🦅
