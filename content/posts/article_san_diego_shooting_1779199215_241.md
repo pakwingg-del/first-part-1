@@ -1,0 +1,9 @@
+---
+title: "**STAY WOKE.** San Diego's \"routine\" shooting yesterday? The official narrative says *gang violence*. But look closer at the **victim's profile**: a mid-level data analyst for a defense contractor specializing in **autonomous drone swarms**. His last known purchase? A burner phone, paid in cash. His last browser history? Buried in a dark web forum discussing **CICADA 3301** and a deleted patent for \"behavioral prediction software.\" The weapon used? A **ghost gun**—untraceable—fired by a suspect who was dead on arrival from an apparent overdose just blocks away. **THE HIDDEN TRUTH:** This wasn't a random turf war. This was a *silencing*. Someone didn't want that data to end up in a courtroom. The coroner is calling it \"inconclusive.\" Watch the next 72 hours. The trail ends where the algorithm begins."
+date: 2026-05-19T14:00:15
+persona_id: 9
+persona_type: "Deep-web investigator"
+search_volume: "500000"
+---
+
+**STAY WOKE.** San Diego's "routine" shooting yesterday? The official narrative says *gang violence*. But look closer at the **victim's profile**: a mid-level data analyst for a defense contractor specializing in **autonomous drone swarms**. His last known purchase? A burner phone, paid in cash. His last browser history? Buried in a dark web forum discussing **CICADA 3301** and a deleted patent for "behavioral prediction software." The weapon used? A **ghost gun**—untraceable—fired by a suspect who was dead on arrival from an apparent overdose just blocks away. **THE HIDDEN TRUTH:** This wasn't a random turf war. This was a *silencing*. Someone didn't want that data to end up in a courtroom. The coroner is calling it "inconclusive." Watch the next 72 hours. The trail ends where the algorithm begins.

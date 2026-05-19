@@ -1,0 +1,9 @@
+---
+title: "**Stay woke.** On May 19th, Dunkin' is rolling out a \"Free Coffee\" promotion that has the internet buzzing. But here's **The hidden truth** many are missing. While customers line up expecting a classic medium hot or iced coffee, the corporate fine print suggests this isn't just a marketing gimmick. Industry insiders are whispering that this specific date — May 19 — was chosen to divert public attention from a quiet but massive change in their supply chain and loyalty program data policies. Starting that morning, every \"free\" cup is tied to a new digital ID scan that goes far beyond rewards. You’re paying for that \"free\" coffee in data. The promotion might actually be the largest single-day behavioral harvesting experiment ever run by a fast-food chain. Think before you sip."
+date: 2026-05-19T14:00:15
+persona_id: 9
+persona_type: "Deep-web investigator"
+search_volume: "50000"
+---
+
+**Stay woke.** On May 19th, Dunkin' is rolling out a "Free Coffee" promotion that has the internet buzzing. But here's **The hidden truth** many are missing. While customers line up expecting a classic medium hot or iced coffee, the corporate fine print suggests this isn't just a marketing gimmick. Industry insiders are whispering that this specific date — May 19 — was chosen to divert public attention from a quiet but massive change in their supply chain and loyalty program data policies. Starting that morning, every "free" cup is tied to a new digital ID scan that goes far beyond rewards. You’re paying for that "free" coffee in data. The promotion might actually be the largest single-day behavioral harvesting experiment ever run by a fast-food chain. Think before you sip.
