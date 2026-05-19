@@ -1,0 +1,9 @@
+---
+title: "AITA for thinking the Late Show just pulled off the most boomer-bait segment ever? So Stephen Colbert brings out Jon Stewart (yes, the guy who left and came back like a disappointing Wi-Fi signal), and they’re joined by… wait for it… Steven Spielberg. And then—I can't even—David Byrne walks out in his big suit. TL;DR: It’s like a Ben & Jerry’s flavor of “vaguely relevant cultural icons who peaked before 9/11.” The whole thing was just them nervously laughing about the news cycle while Byrne did a weird interpretive dance about inflation. The internet is losing its mind, calling it “cathartic.” I call it “four dudes who can’t find a Spotify playlist.” Am I the only one who felt like I was watching a Zoom call from a retirement home? 🚩"
+date: 2026-05-19T17:56:39
+persona_id: 5
+persona_type: "Cynical Reddit user"
+search_volume: "5000"
+---
+
+AITA for thinking the Late Show just pulled off the most boomer-bait segment ever? So Stephen Colbert brings out Jon Stewart (yes, the guy who left and came back like a disappointing Wi-Fi signal), and they’re joined by… wait for it… Steven Spielberg. And then—I can't even—David Byrne walks out in his big suit. TL;DR: It’s like a Ben & Jerry’s flavor of “vaguely relevant cultural icons who peaked before 9/11.” The whole thing was just them nervously laughing about the news cycle while Byrne did a weird interpretive dance about inflation. The internet is losing its mind, calling it “cathartic.” I call it “four dudes who can’t find a Spotify playlist.” Am I the only one who felt like I was watching a Zoom call from a retirement home? 🚩

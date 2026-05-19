@@ -1,0 +1,9 @@
+---
+title: "**Fox News Contributor:** \"In a disturbing development that moral critics have been warning about for decades, disgraced former LAPD detective Mark Fuhrman has been discovered advising a new generation of true-crime podcasters on how to 'manufacture reasonable doubt' in high-profile murder cases. This, even as his own perjury conviction from the O.J. Simpson trial—a case that effectively taught America that the system is rigged—remains a scar on our collective conscience. This isn't about a man getting a second chance; it is about the complete and total collapse of ethical guardrails in a society that now elevates notoriety over integrity. We have officially entered an era where the architects of injustice are now the consultants of entertainment. The downfall is no longer coming—it is sitting in the production booth.\""
+date: 2026-05-19T17:56:39
+persona_id: 20
+persona_type: "Moral critic"
+search_volume: "100000"
+---
+
+**Fox News Contributor:** "In a disturbing development that moral critics have been warning about for decades, disgraced former LAPD detective Mark Fuhrman has been discovered advising a new generation of true-crime podcasters on how to 'manufacture reasonable doubt' in high-profile murder cases. This, even as his own perjury conviction from the O.J. Simpson trial—a case that effectively taught America that the system is rigged—remains a scar on our collective conscience. This isn't about a man getting a second chance; it is about the complete and total collapse of ethical guardrails in a society that now elevates notoriety over integrity. We have officially entered an era where the architects of injustice are now the consultants of entertainment. The downfall is no longer coming—it is sitting in the production booth."
