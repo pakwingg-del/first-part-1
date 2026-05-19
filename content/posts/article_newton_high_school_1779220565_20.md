@@ -1,0 +1,17 @@
+---
+title: "JUST IN: NEWTON HIGH SCHOOL TURNS INTO A GRAVITY-DEFYING NIGHTMARE!"
+date: 2026-05-19T19:56:05
+persona_id: 1
+persona_type: "Tabloid journalist"
+search_volume: "2000"
+---
+
+JUST IN: NEWTON HIGH SCHOOL TURNS INTO A GRAVITY-DEFYING NIGHTMARE!
+
+BREAKING: EXCLUSIVE FOOTAGE CAPTURED! Students at Newton High School have been FOUND STUCK TO THE CEILING after a MASSIVE, unexplained GRAVITY ANOMALY in the science wing!
+
+WITNESSES say one moment, kids were taking a normal physics exam – the NEXT, they were FLOATING! DESK AND CHAIRS PINNED TO THE WALLS! A teacher reportedly screamed, “IT’S THE APPLE TURNING ON US!”
+
+Authorities are TERRIFIED! Is this a SECRET SCIENCE EXPERIMENT GONE HORRIBLY WRONG? Or a SICK TWIST OF FATE? PARENTS ARE PANICKING! One mother shrieked, “My daughter is SUSPENDED… LITERALLY!”
+
+WE HAVE THE SHOCKING VIDEO NEXT! YOU WON’T BELIEVE WHAT HAPPENS WHEN THEY TRY TO PULL THEM DOWN!
