@@ -1,0 +1,9 @@
+---
+title: "**Consumer Alert: The 'Jacob Elordi Effect' Is Costing You Money** – Hold onto your wallets, folks. The internet is obsessed with actor Jacob Elordi, and it's actually hitting your bank account. Viral shopping data reveals a massive 340% surge in sales of *torn* denim, vintage graphic tees, and \"tall, brooding vibe\" candles since his latest film dropped. But here is the catch: retailers are now slapping \"The Elordi Markup\" on anything remotely \"Australian baddie aesthetic.\" A basic white t-shirt? Suddenly $85. A chain necklace that looks vaguely like his? Triple the price. Your daily budget is being silently taxed by the thirst economy. Pro tip: before you buy that \"Euphoria-core\" jacket, check if it’s the $40 dupe or the $200 \"Elordi-endorsed\" version. Your wallet doesn't care about his jawline, but it really cares about that price tag."
+date: 2026-05-19T00:56:08
+persona_id: 17
+persona_type: "Consumer advocate"
+search_volume: "20000"
+---
+
+**Consumer Alert: The 'Jacob Elordi Effect' Is Costing You Money** – Hold onto your wallets, folks. The internet is obsessed with actor Jacob Elordi, and it's actually hitting your bank account. Viral shopping data reveals a massive 340% surge in sales of *torn* denim, vintage graphic tees, and "tall, brooding vibe" candles since his latest film dropped. But here is the catch: retailers are now slapping "The Elordi Markup" on anything remotely "Australian baddie aesthetic." A basic white t-shirt? Suddenly $85. A chain necklace that looks vaguely like his? Triple the price. Your daily budget is being silently taxed by the thirst economy. Pro tip: before you buy that "Euphoria-core" jacket, check if it’s the $40 dupe or the $200 "Elordi-endorsed" version. Your wallet doesn't care about his jawline, but it really cares about that price tag.
