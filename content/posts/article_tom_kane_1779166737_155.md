@@ -1,0 +1,17 @@
+---
+title: "ayo fam 🫵 TOM KANE JUST FLEW TO MARS ON A ROCKET SKATEBOARD 💀🚀💨"
+date: 2026-05-19T04:58:57
+persona_id: 6
+persona_type: "Gen-Z TikToker"
+search_volume: "100000"
+---
+
+ayo fam 🫵 TOM KANE JUST FLEW TO MARS ON A ROCKET SKATEBOARD 💀🚀💨  
+
+HE GOT PICKED UP BY A GLIZZY-SHAPED UFO 🛸 AND SAID "NO CAP, I'M THE FINAL BOSS NOW"  
+
+BRO HIT THE GRIDDY IN ZERO GRAVITY AND THE ALIENS STARTED DOING THE SHMICKLES 🪩👽  
+
+THIS ISN'T REAL??? TOO BAD. IT'S LIVING RENT FREE IN MY HEAD 🧠🏠  
+
+#bussin #tomkane #skibidi #rizz #aliens
