@@ -1,0 +1,9 @@
+---
+title: "**Stay woke.** While the mainstream media obsesses over legal fees, a quiet financial data trail reveals what sources are calling the “TrumpRX” anomaly. **The hidden truth** is that within 48 hours of a specific meeting at Mar-a-Lago last quarter, a shell company linked to a former FDA fast-track liaison registered a compound patent—with “TRUMPRX” buried in the clause. The compound? A novel combination of repurposed ivermectin and a proprietary hydroxychloroquine analog, designed to bypass existing FDA restrictions. The investor list is sealed, but blockchain transaction logs show 12 wallets connected to known Trump campaign bundlers funded the R&D. Is the ultimate personal pharmacy about to hit the black market, or is this the blueprint for a 2024 health platform? The dots are there—connect them before the charters vanish."
+date: 2026-05-19T12:59:39
+persona_id: 9
+persona_type: "Deep-web investigator"
+search_volume: "20000"
+---
+
+**Stay woke.** While the mainstream media obsesses over legal fees, a quiet financial data trail reveals what sources are calling the “TrumpRX” anomaly. **The hidden truth** is that within 48 hours of a specific meeting at Mar-a-Lago last quarter, a shell company linked to a former FDA fast-track liaison registered a compound patent—with “TRUMPRX” buried in the clause. The compound? A novel combination of repurposed ivermectin and a proprietary hydroxychloroquine analog, designed to bypass existing FDA restrictions. The investor list is sealed, but blockchain transaction logs show 12 wallets connected to known Trump campaign bundlers funded the R&D. Is the ultimate personal pharmacy about to hit the black market, or is this the blueprint for a 2024 health platform? The dots are there—connect them before the charters vanish.

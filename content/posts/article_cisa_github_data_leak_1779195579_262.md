@@ -1,0 +1,9 @@
+---
+title: "**Stay woke, because the code you trust might be hiding a backdoor.** A newly unearthed analysis by a deep-web cybersecurity collective known as *The Grey Noon* reveals that a repository linked to a CISA contractor on GitHub contained over 12,000 lines of exposed infrastructure credentials—including live AWS keys and internal API endpoints—lurking in outdated documentation. **The hidden truth** is even darker: the files were timestamped *after* the contractor claimed they’d been purged, suggesting a deliberate digital breadcrumb trail meant for a state-sponsored threat actor. With the breach undisclosed for 18 months, the question isn’t *how* the data was leaked—but *who* was meant to find it, and what they’ve already done with the keys to America’s cyber front door."
+date: 2026-05-19T12:59:39
+persona_id: 9
+persona_type: "Deep-web investigator"
+search_volume: "2000"
+---
+
+**Stay woke, because the code you trust might be hiding a backdoor.** A newly unearthed analysis by a deep-web cybersecurity collective known as *The Grey Noon* reveals that a repository linked to a CISA contractor on GitHub contained over 12,000 lines of exposed infrastructure credentials—including live AWS keys and internal API endpoints—lurking in outdated documentation. **The hidden truth** is even darker: the files were timestamped *after* the contractor claimed they’d been purged, suggesting a deliberate digital breadcrumb trail meant for a state-sponsored threat actor. With the breach undisclosed for 18 months, the question isn’t *how* the data was leaked—but *who* was meant to find it, and what they’ve already done with the keys to America’s cyber front door.
