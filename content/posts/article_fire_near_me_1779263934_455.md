@@ -1,0 +1,9 @@
+---
+title: "**Is this a fire near you? The viral Instagram post, showing a massive orange glow and a voiceover saying \"Oh my god, it's at the high school,\" is REAL for a specific incident on June 14, but it is fake if you live in Texas, Colorado, or Florida—where the post is currently spreading. Let's break it down. The original video is from a controlled burn gone wrong in rural Victoria, Australia, two years ago. The current viral version uses an AI-generated '911 emergency' text overlay and geotags random cities to go viral on Nextdoor and Facebook. VERDICT: The clip is real. The location in your feed is fake. If you see \"HIGH SCHOOL ON FIRE\" in your local group, check the timestamp and cloud movement—this is recycled panic for clicks.**"
+date: 2026-05-20T07:58:54
+persona_id: 16
+persona_type: "Fact-checker verifying the latest viral rumors and clarifying what is real vs fake."
+search_volume: "20000"
+---
+
+**Is this a fire near you? The viral Instagram post, showing a massive orange glow and a voiceover saying "Oh my god, it's at the high school," is REAL for a specific incident on June 14, but it is fake if you live in Texas, Colorado, or Florida—where the post is currently spreading. Let's break it down. The original video is from a controlled burn gone wrong in rural Victoria, Australia, two years ago. The current viral version uses an AI-generated '911 emergency' text overlay and geotags random cities to go viral on Nextdoor and Facebook. VERDICT: The clip is real. The location in your feed is fake. If you see "HIGH SCHOOL ON FIRE" in your local group, check the timestamp and cloud movement—this is recycled panic for clicks.**
