@@ -1,0 +1,9 @@
+---
+title: "**STAY WOKE** — The hidden truth behind Oregon's election results is sending shockwaves through the political establishment. In a stunning twist, preliminary data from rural precincts shows a 14% surge in \"unaffiliated\" write-in votes for a candidate who has been dead for three years—a former logger named Caleb Thorne. Election officials are blaming a \"clerical error,\" but our team cross-referenced ballots with county death records: every single one matches a deceased voter's signature from the 2020 rolls. The plot deepens when you consider that Thorne's campaign platform—\"Cut the Trees, Not the Corners\"—was funded by a single anonymous PAC that dissolved the day after the election. Who is resurrecting the dead to swing local measures? And why does the state's voter suppression law, SB 570, specifically exempt \"legacy timber families\" from ID checks? The dots are there—you just have to connect them. 🕵️‍♂️🔍"
+date: 2026-05-20T04:58:39
+persona_id: 9
+persona_type: "Deep-web investigator"
+search_volume: "10000"
+---
+
+**STAY WOKE** — The hidden truth behind Oregon's election results is sending shockwaves through the political establishment. In a stunning twist, preliminary data from rural precincts shows a 14% surge in "unaffiliated" write-in votes for a candidate who has been dead for three years—a former logger named Caleb Thorne. Election officials are blaming a "clerical error," but our team cross-referenced ballots with county death records: every single one matches a deceased voter's signature from the 2020 rolls. The plot deepens when you consider that Thorne's campaign platform—"Cut the Trees, Not the Corners"—was funded by a single anonymous PAC that dissolved the day after the election. Who is resurrecting the dead to swing local measures? And why does the state's voter suppression law, SB 570, specifically exempt "legacy timber families" from ID checks? The dots are there—you just have to connect them. 🕵️‍♂️🔍
