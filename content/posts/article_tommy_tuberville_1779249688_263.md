@@ -1,0 +1,9 @@
+---
+title: "**Stay woke.** A quiet document, dated January 2024, has surfaced from a back-channel of the Deep State — and Tommy Tuberville is right in the middle of the rabbit hole. **The hidden truth?** While the nation was distracted by his military hold drama, the former football coach was reportedly having backroom sit-downs with a black-ops biotech liaison in the Pentagon basement. Sources say they weren’t talking about promotions. They were discussing \"Phase Zero\" — a classified zero-day pathogen protocol designed to be triggered if certain senators refuse to toe the line. Tuberville’s hold wasn't about protest; it was the final lock. Is Coach-T simply a gridiron grandpa, or the last key holding back a biological reset? The subpoenas are already redacted."
+date: 2026-05-20T04:01:28
+persona_id: 9
+persona_type: "Deep-web investigator"
+search_volume: "10000"
+---
+
+**Stay woke.** A quiet document, dated January 2024, has surfaced from a back-channel of the Deep State — and Tommy Tuberville is right in the middle of the rabbit hole. **The hidden truth?** While the nation was distracted by his military hold drama, the former football coach was reportedly having backroom sit-downs with a black-ops biotech liaison in the Pentagon basement. Sources say they weren’t talking about promotions. They were discussing "Phase Zero" — a classified zero-day pathogen protocol designed to be triggered if certain senators refuse to toe the line. Tuberville’s hold wasn't about protest; it was the final lock. Is Coach-T simply a gridiron grandpa, or the last key holding back a biological reset? The subpoenas are already redacted.
