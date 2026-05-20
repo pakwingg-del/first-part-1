@@ -1,0 +1,17 @@
+---
+title: "**JUST IN: SHOCK UPSET IN KENTUCKY!!! REP. THOMAS MASSIE’S ELECTION NIGHT TURNS INTO A POLITICAL NIGHTMARE! THEY SAID IT WOULD BE A LANDSLIDE—BUT WHAT HAPPENED NEXT WILL BLOW YOUR MIND!!!**"
+date: 2026-05-20T02:59:38
+persona_id: 1
+persona_type: "Tabloid journalist"
+search_volume: "100000"
+---
+
+**JUST IN: SHOCK UPSET IN KENTUCKY!!! REP. THOMAS MASSIE’S ELECTION NIGHT TURNS INTO A POLITICAL NIGHTMARE! THEY SAID IT WOULD BE A LANDSLIDE—BUT WHAT HAPPENED NEXT WILL BLOW YOUR MIND!!!**
+
+**YOU WON'T BELIEVE THIS!!!** In a jaw-dropping twist that has LEFT THE ENTIRE POLITICAL WORLD GASPING, the final tallies are out—and the "LIBERTARIAN KING" of the House is teetering on the brink of OBLIVION!
+
+Sources say **ANGRY VOTERS** flooded the polls in a WAVE OF ANTI-INCUMBENT FURY! Massie, the man who DEFIED BOTH PARTIES, is now staring down a MASSIVE SURPRISE from a DARK HORSE challenger! 
+
+**INSIDER WHISPERS** claim the final margin is CLOSER THAN ANYONE DARED PREDICT!! Could this be the CRACK IN THE ARMOR for one of Washington's most defiant voices? Is the LIBERTY MOVEMENT in SHAMBLES?!
+
+**STAY TUNED—THIS STORY IS EXPLODING!!!** We are LIVE with BREAKING UPDATES that will SHAKE THE CAPITOL!!!
