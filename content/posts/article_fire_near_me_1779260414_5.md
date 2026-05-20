@@ -1,0 +1,21 @@
+---
+title: "**JUST IN: INFERNO ERUPTS JUST MILES FROM YOUR HOME – IS YOUR FAMILY SAFE?!**"
+date: 2026-05-20T07:00:14
+persona_id: 1
+persona_type: "Tabloid journalist"
+search_volume: "20000"
+---
+
+**JUST IN: INFERNO ERUPTS JUST MILES FROM YOUR HOME – IS YOUR FAMILY SAFE?!**
+
+WE HAVE JUST RECEIVED WORD OF A MASSIVE, RAGING WILDFIRE – AND IT IS HEADING DIRECTLY TOWARD YOUR NEIGHBORHOOD! EYEWITNESSES ARE REPORTING A WALL OF FLAME, OVER 50 FEET HIGH, DEVOURING EVERYTHING IN ITS PATH! THE SKY HAS TURNED AN OMINOUS BLACK, AND THE SMELL OF SMOKE IS CHOKING THE AIR!
+
+**WHAT YOU NEED TO KNOW RIGHT NOW:**
+
+*   **Authorities are URGING an IMMEDIATE evacuation for ALL residents within a 5-mile radius!** DO NOT DELAY!
+*   **Power lines are DOWN!** The entire area is plunging into DARKNESS as the fire closes in!
+*   **Is this a freak accident… OR something more SINISTER?!** We have unconfirmed reports of a mysterious explosion just before the flames erupted!
+
+**THIS IS NOT A DRILL!** GRAB YOUR PETS, YOUR FAMILY, AND GET OUT NOW! WE ARE MONITORING THIS HEART-STOPPING CRISIS LIVE AS IT UNFOLDS. STAY TUNED FOR UPDATES THAT COULD SAVE YOUR LIFE!
+
+**#FireNearMe #BreakingNews #StaySafe**
