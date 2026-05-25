@@ -1,6 +1,6 @@
 baseURL = "https://viralnn.com/"
 languageCode = 'en-us'
-title = 'VNN | Viral News Network' # SEO 優化：加上縮寫，更專業
+title = 'VNN | Viral News Network' # SEO 優化：加上縮寫
 theme = "FixIt"
 
 # 全域分頁設定 (控制 /posts/ 頁面)
