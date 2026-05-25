@@ -1,4 +1,4 @@
-baseURL = 'https://my-viral-news0.pages.dev/'
+baseURL = "https://viralnn.com/"
 languageCode = 'en-us'
 title = 'VNN | Viral News Network' # SEO 優化：加上縮寫，更專業
 theme = "FixIt"
