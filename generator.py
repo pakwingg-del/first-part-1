@@ -114,7 +114,7 @@ def generate_matrix():
     # 1. 自動清理過期檔案 (大於 30 天)
     print("🧹 Checking for expired articles (older than 30 days)...")
     now = datetime.now()
-    retention_days = 30
+    retention_days = 3
     deleted_count = 0
 
     for file_name in os.listdir(output_dir):
