@@ -6,6 +6,14 @@ theme = "FixIt"
 # 全域分頁設定 (控制 /posts/ 頁面)
 paginate = 15
 
+# ====================================================
+# 【重要修正】放行 AI 文章內的原生 HTML，解決 Log 警告
+# ====================================================
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true  # 允許渲染 AI 文章內可能包含的 HTML/Markdown 格式
+
 [params]
     env = "production"
     defaultTheme = "dark" # 強制深色底，視覺衝擊力強
@@ -30,7 +38,7 @@ paginate = 15
         typeit = true
         social = true
 
-    # 【關鍵修正】強制首頁顯示 15 篇，達成 3x5 網格
+    # 強制首頁顯示 15 篇，達成 3x5 網格
     [params.home.posts]
         enable = true
         paginate = 15
@@ -60,10 +68,10 @@ paginate = 15
         url = "/posts/"
         weight = 10
 
-# 確保路徑正確
-[content]
-    [content.posts]
-        path = "content/posts"
+# ====================================================
+# 【核心修正】移除了原本錯誤的 [content.posts] 語法
+# Hugo 預設就會自動讀取 content/posts/，不需額外宣告錯誤語法
+# ====================================================
 
 # 永久連結優化：Google 爬蟲最鍾意嘅日期結構
 [permalinks]
