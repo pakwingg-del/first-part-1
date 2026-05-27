@@ -2,6 +2,7 @@ import json
 import os
 import time
 import requests
+import sys  # 🚀 新增：用來在出錯時中斷 GitHub 流程
 from datetime import datetime
 from openai import OpenAI
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -82,7 +83,7 @@ def generate_matrix():
         last_updated = data["matrix_metadata"]["last_updated_hkt"]
     except Exception as e:
         print(f"❌ Error fetching trends: {e}")
-        return
+        sys.exit(1)
 
     all_articles = []
     
@@ -105,15 +106,15 @@ def generate_matrix():
                 print(f"📦 Progress: {completed_count}/600 articles generated...")
 
     # ====================================================
-    # 中期計劃核心更改：全面直刷 Cloudflare D1 資料庫
+    # 修正：全面改為從環境變數讀取，不再硬編碼
     # ====================================================
-    CLOUDFLARE_ACCOUNT_ID = "7bc1ee394be7ac727a3cb2d2c140df3c"
-    CLOUDFLARE_DATABASE_ID = "3d8f6cef-6e32-43e7-a115-9287f940e12d"
-    CLOUDFLARE_API_TOKEN = os.environ.get("CLOUDFLARE_API_TOKEN") # 從 GitHub Secrets 讀取
+    CLOUDFLARE_ACCOUNT_ID = os.environ.get("CLOUDFLARE_ACCOUNT_ID")
+    CLOUDFLARE_DATABASE_ID = os.environ.get("CLOUDFLARE_DATABASE_ID")
+    CLOUDFLARE_API_TOKEN = os.environ.get("CLOUDFLARE_API_TOKEN")
 
-    if not CLOUDFLARE_API_TOKEN:
-        print("❌ Critical Error: CLOUDFLARE_API_TOKEN is not set in environment variables!")
-        return
+    if not all([CLOUDFLARE_ACCOUNT_ID, CLOUDFLARE_DATABASE_ID, CLOUDFLARE_API_TOKEN]):
+        print("❌ Critical Error: Missing Cloudflare credentials in environment variables!")
+        sys.exit(1)
 
     print(f"🚀 Preparing to inject {len(all_articles)} articles into Cloudflare D1...")
 
@@ -125,16 +126,13 @@ def generate_matrix():
 
     statements = []
     for idx, article in enumerate(all_articles):
-        # 移除非法字元，確保 URL Slug 乾淨且符合 Google 爬蟲喜好
         safe_keyword = "".join([c if c.isalnum() else "_" for c in article['keyword']]).lower()
         url_slug = f"{year}/{month}/{day}/{safe_keyword}_{idx}"
         
-        # 處理 Adsterra 驗證碼，強行確保第 1 篇文內文帶有驗證 token 雙重保險
         article_body = article['body']
         if idx == 0:
             article_body += "\n\nAdsterra verification string: 2HDmQ9"
 
-        # 構造 D1 批量執行（Batch）的 SQL 語句
         sql = "INSERT OR REPLACE INTO articles (title, keyword, body, persona_id, persona_type, search_volume, created_at, url_slug) VALUES (?, ?, ?, ?, ?, ?, ?, ?);"
         params = [
             article['title'],
@@ -148,26 +146,36 @@ def generate_matrix():
         ]
         statements.append({"sql": sql, "params": params})
 
-    # Cloudflare API 單次 Payload 限制，分批（每 50 篇一組）打包射過去
+    # Cloudflare API 分批打包發送
     chunk_size = 50
     headers = {
         "Authorization": f"Bearer {CLOUDFLARE_API_TOKEN}",
         "Content-Type": "application/json"
     }
-    url = f"https://api.cloudflare.com/client/v4/accounts/{CLOUDFLARE_ACCOUNT_ID}/d1/database/{CLOUDFLARE_DATABASE_ID}/query"
+    
+    # 🚀 修正 1: database -> databases (複數)
+    url = f"https://api.cloudflare.com/client/v4/accounts/{CLOUDFLARE_ACCOUNT_ID}/d1/databases/{CLOUDFLARE_DATABASE_ID}/query"
 
+    has_error = False
     for i in range(0, len(statements), chunk_size):
         chunk = statements[i:i + chunk_size]
         try:
-            response = requests.post(url, headers=headers, json={"batches": chunk}, timeout=30)
+            # 🚀 修正 2: json=chunk 直接傳送 List，不再包一層 "batches"
+            response = requests.post(url, headers=headers, json=chunk, timeout=30)
             if response.status_code == 200 and response.json().get("success"):
                 print(f"✅ Successfully injected chunk {i // chunk_size + 1}/{((len(statements)-1)//chunk_size)+1}")
             else:
                 print(f"❌ Failed to inject chunk {i // chunk_size + 1}: {response.text}")
+                has_error = True
         except Exception as e:
             print(f"⚠️ Connection error during chunk {i // chunk_size + 1}: {e}")
+            has_error = True
 
-    print("🎉 MISSION COMPLETE: All AI articles are stored in the Edge Cloud Database!")
+    if has_error:
+        print("❌ MISSION FAILED: Some or all chunks failed to inject into D1.")
+        sys.exit(1)  # 讓 GitHub 真正亮紅燈
+    else:
+        print("🎉 MISSION COMPLETE: All AI articles are stored in the Edge Cloud Database!")
 
 if __name__ == "__main__":
     generate_matrix()
