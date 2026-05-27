@@ -2,7 +2,7 @@ import json
 import os
 import time
 import requests
-import sys  # 🚀 新增：用來在出錯時中斷 GitHub 流程
+import sys  # 🚀 用來在出錯時中斷 GitHub 流程，讓 Actions 亮紅燈
 from datetime import datetime
 from openai import OpenAI
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -58,11 +58,15 @@ def fetch_single_article(persona_tuple, seed, last_updated):
         )
         content = completion.choices[0].message.content
         
+        # 💡 防呆優化：過濾掉開頭的空行，精準撈出第一行做 Title
+        lines = [line.strip() for line in content.split('\n') if line.strip()]
+        title = lines[0].replace('#', '').strip() if lines else query
+        
         return {
             "keyword": query,
             "persona_id": round_idx + 1,
             "persona_type": current_persona.split(',')[0],
-            "title": content.split('\n')[0].replace('#', '').strip(),
+            "title": title,
             "body": content,
             "source_volume": seed.get("search_volume"),
             "generated_at": last_updated
@@ -106,7 +110,7 @@ def generate_matrix():
                 print(f"📦 Progress: {completed_count}/600 articles generated...")
 
     # ====================================================
-    # 修正：全面改為從環境變數讀取，不再硬編碼
+    # 從 GitHub Secrets 注入的環境變數讀取
     # ====================================================
     CLOUDFLARE_ACCOUNT_ID = os.environ.get("CLOUDFLARE_ACCOUNT_ID")
     CLOUDFLARE_DATABASE_ID = os.environ.get("CLOUDFLARE_DATABASE_ID")
@@ -126,11 +130,13 @@ def generate_matrix():
 
     statements = []
     for idx, article in enumerate(all_articles):
+        # 移除非法字元，確保 URL Slug 符合爬蟲喜好
         safe_keyword = "".join([c if c.isalnum() else "_" for c in article['keyword']]).lower()
         url_slug = f"{year}/{month}/{day}/{safe_keyword}_{idx}"
         
         article_body = article['body']
         if idx == 0:
+            # 第一篇文章強行附帶 Adsterra 驗證碼做雙重保險
             article_body += "\n\nAdsterra verification string: 2HDmQ9"
 
         sql = "INSERT OR REPLACE INTO articles (title, keyword, body, persona_id, persona_type, search_volume, created_at, url_slug) VALUES (?, ?, ?, ?, ?, ?, ?, ?);"
@@ -146,21 +152,21 @@ def generate_matrix():
         ]
         statements.append({"sql": sql, "params": params})
 
-    # Cloudflare API 分批打包發送
+    # Cloudflare API 分批打包發送（每 50 篇一組）
     chunk_size = 50
     headers = {
         "Authorization": f"Bearer {CLOUDFLARE_API_TOKEN}",
         "Content-Type": "application/json"
     }
     
-    # 🚀 修正 1: database -> databases (複數)
-    url = f"https://api.cloudflare.com/client/v4/accounts/{CLOUDFLARE_ACCOUNT_ID}/d1/databases/{CLOUDFLARE_DATABASE_ID}/query"
+    # 🚀 終極修正：Cloudflare 規定此處路徑必須使用單數 'database'
+    url = f"https://api.cloudflare.com/client/v4/accounts/{CLOUDFLARE_ACCOUNT_ID}/d1/database/{CLOUDFLARE_DATABASE_ID}/query"
 
     has_error = False
     for i in range(0, len(statements), chunk_size):
         chunk = statements[i:i + chunk_size]
         try:
-            # 🚀 修正 2: json=chunk 直接傳送 List，不再包一層 "batches"
+            # 🚀 格式修正：直接送出 List 陣列，不包裝額外的 JSON key
             response = requests.post(url, headers=headers, json=chunk, timeout=30)
             if response.status_code == 200 and response.json().get("success"):
                 print(f"✅ Successfully injected chunk {i // chunk_size + 1}/{((len(statements)-1)//chunk_size)+1}")
@@ -173,7 +179,7 @@ def generate_matrix():
 
     if has_error:
         print("❌ MISSION FAILED: Some or all chunks failed to inject into D1.")
-        sys.exit(1)  # 讓 GitHub 真正亮紅燈
+        sys.exit(1)
     else:
         print("🎉 MISSION COMPLETE: All AI articles are stored in the Edge Cloud Database!")
 
