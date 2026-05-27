@@ -159,15 +159,18 @@ def generate_matrix():
         "Content-Type": "application/json"
     }
     
-    # 🚀 終極修正：Cloudflare 規定此處路徑必須使用單數 'database'
+    # 確保路徑維持官方規定的單數 'database'
     url = f"https://api.cloudflare.com/client/v4/accounts/{CLOUDFLARE_ACCOUNT_ID}/d1/database/{CLOUDFLARE_DATABASE_ID}/query"
 
     has_error = False
     for i in range(0, len(statements), chunk_size):
         chunk = statements[i:i + chunk_size]
+        
+        # 🚀 終極修正：Cloudflare 規定多條 SQL 批次發送時，外層必須是一個 Object 且包在 "batches" 內
+        payload = {"batches": chunk}
+        
         try:
-            # 🚀 格式修正：直接送出 List 陣列，不包裝額外的 JSON key
-            response = requests.post(url, headers=headers, json=chunk, timeout=30)
+            response = requests.post(url, headers=headers, json=payload, timeout=30)
             if response.status_code == 200 and response.json().get("success"):
                 print(f"✅ Successfully injected chunk {i // chunk_size + 1}/{((len(statements)-1)//chunk_size)+1}")
             else:
