@@ -2,9 +2,12 @@ name: Hourly Content Matrix
 
 on:
   workflow_dispatch: 
+  # 如果你想佢每小時自動行一次，可以解鎖下面呢兩行 cron
+  # schedule:
+  #   - cron: '0 * * * *'
 
 permissions:
-  contents: write  # 賦予寫入權限，等佢可以 push 檔案
+  contents: read  # 依家只需要讀取程式碼，唔使再浪費時間寫入 Repo 喇！
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
@@ -16,7 +19,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           submodules: true
-          fetch-depth: 0
+          fetch-depth: 1 # 唔使再撈成個 Git 歷史，深度設為 1 跑得更快！
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -26,24 +29,9 @@ jobs:
       - name: Install Dependencies
         run: pip install requests openai
 
-      - name: Generate Content Matrix
+      - name: Generate Content Matrix & Inject to D1
         env:
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }} # 💡 核心：必須注入呢個，Python 先有權限寫入 D1！
           REPO_INDEX: 0
         run: python generator.py
-
-      - name: Commit and Push Matrix Data
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          
-          # 核心修改：使用 -A 追蹤資料夾內的所有新增（Add）與過期刪除（Delete）
-          git add -A content/posts/
-          
-          if git diff --staged --quiet; then
-            echo "No changes to commit, skipping push."
-          else
-            git commit -m "Update viral news matrix: sync articles and clean expired posts"
-            git pull --rebase origin main
-            git push origin main
-          fi
