@@ -166,8 +166,8 @@ def generate_matrix():
     for i in range(0, len(statements), chunk_size):
         chunk = statements[i:i + chunk_size]
         
-        # 🚀 終極修正：Cloudflare 規定多條 SQL 批次發送時，外層必須是一個 Object 且包在 "batches" 內
-        payload = {"batches": chunk}
+        # 🚀 終極修正：Cloudflare 規定的批次 Key 必須是單數 "batch" 而不是 "batches"
+        payload = {"batch": chunk}
         
         try:
             response = requests.post(url, headers=headers, json=payload, timeout=30)
