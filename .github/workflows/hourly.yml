@@ -1,13 +1,12 @@
 name: Hourly Content Matrix
 
 on:
-  workflow_dispatch: 
-  # 如果你想佢每小時自動行一次，可以解鎖下面呢兩行 cron
-  # schedule:
-  #   - cron: '0 * * * *'
+  workflow_dispatch: # 允許你喺 GitHub 網頁上手動點擊 Run
+  repository_dispatch:
+    types: [external_trigger] # 🚀 新增：允許你用外部 API (例如 Cloudflare Workers) 一鍵炸過來觸發
 
 permissions:
-  contents: read  # 依家只需要讀取程式碼，唔使再浪費時間寫入 Repo 喇！
+  contents: read  # 只需要讀取程式碼，安全又省時！
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
@@ -19,7 +18,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           submodules: true
-          fetch-depth: 1 # 唔使再撈成個 Git 歷史，深度設為 1 跑得更快！
+          fetch-depth: 1 # 深度設為 1 跑得更快！
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -32,8 +31,8 @@ jobs:
       - name: Generate Content Matrix & Inject to D1
         env:
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}   # 💡 核心：必須注入呢個，Python 先有權限寫入 D1！
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }} # 🔑 新增：話畀 Python 聽你個 Cloudflare 帳戶 ID 係咩
-          CLOUDFLARE_DATABASE_ID: ${{ secrets.CLOUDFLARE_DATABASE_ID }} # 🔑 新增：話畀 Python 聽要射落去邊個 D1 資料庫
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_DATABASE_ID: ${{ secrets.CLOUDFLARE_DATABASE_ID }}
           REPO_INDEX: 0
         run: python generator.py
