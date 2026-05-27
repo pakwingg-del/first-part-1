@@ -2,7 +2,7 @@ import json
 import os
 import time
 import requests
-from datetime import datetime, timedelta
+from datetime import datetime
 from openai import OpenAI
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
@@ -58,7 +58,6 @@ def fetch_single_article(persona_tuple, seed, last_updated):
         content = completion.choices[0].message.content
         
         return {
-            # 保持 keyword 原貌供檔名轉換使用
             "keyword": query,
             "persona_id": round_idx + 1,
             "persona_type": current_persona.split(',')[0],
@@ -106,62 +105,69 @@ def generate_matrix():
                 print(f"📦 Progress: {completed_count}/600 articles generated...")
 
     # ====================================================
-    # 核心更改：Plan A 儲存與 30 天自動清理機制
+    # 中期計劃核心更改：全面直刷 Cloudflare D1 資料庫
     # ====================================================
-    output_dir = "content/posts"
-    os.makedirs(output_dir, exist_ok=True)
+    CLOUDFLARE_ACCOUNT_ID = "7bc1ee394be7ac727a3cb2d2c140df3c"
+    CLOUDFLARE_DATABASE_ID = "3d8f6cef-6e32-43e7-a115-9287f940e12d"
+    CLOUDFLARE_API_TOKEN = os.environ.get("CLOUDFLARE_API_TOKEN") # 從 GitHub Secrets 讀取
 
-    # 1. 自動清理過期檔案 (大於 30 天)
-    print("🧹 Checking for expired articles (older than 30 days)...")
-    now = datetime.now()
-    retention_days = 3
-    deleted_count = 0
+    if not CLOUDFLARE_API_TOKEN:
+        print("❌ Critical Error: CLOUDFLARE_API_TOKEN is not set in environment variables!")
+        return
 
-    for file_name in os.listdir(output_dir):
-        if file_name.endswith(".md"):
-            file_path = os.path.join(output_dir, file_name)
-            file_time = datetime.fromtimestamp(os.path.getmtime(file_path))
-            
-            if now - file_time > timedelta(days=retention_days):
-                try:
-                    os.remove(file_path)
-                    deleted_count += 1
-                except Exception as e:
-                    print(f"⚠️ Failed to delete {file_name}: {e}")
+    print(f"🚀 Preparing to inject {len(all_articles)} articles into Cloudflare D1...")
 
-    if deleted_count > 0:
-        print(f"🗑️ Cleaned up {deleted_count} expired Markdown files.")
-    else:
-        print("✨ No expired articles found.")
+    current_time = int(time.time())
+    hugo_date = datetime.now()
+    year = hugo_date.strftime("%Y")
+    month = hugo_date.strftime("%m")
+    day = hugo_date.strftime("%d")
 
-    # 2. 將 600 篇新文章分別寫入獨立的 .md 檔案
-    print(f"✍️ Writing {len(all_articles)} new Markdown files for Hugo...")
-    
-    # 格式化 Hugo 所需的 Date 欄位 (e.g., 2026-05-19T06:00:00)
-    # 如果 last_updated 格式不支援，則 fallback 使用目前系統時間
-    try:
-        hugo_date = datetime.strptime(last_updated, "%Y-%m-%d %H:%M").strftime("%Y-%m-%dT%H:%M:%S")
-    except Exception:
-        hugo_date = datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
-
+    statements = []
     for idx, article in enumerate(all_articles):
-        # 移除非法字元，確保檔名安全
-        safe_keyword = "".join([c if c.isalnum() else "_" for c in article['keyword']])
-        timestamp = int(time.time())
-        file_name = f"{output_dir}/article_{safe_keyword}_{timestamp}_{idx}.md"
+        # 移除非法字元，確保 URL Slug 乾淨且符合 Google 爬蟲喜好
+        safe_keyword = "".join([c if c.isalnum() else "_" for c in article['keyword']]).lower()
+        url_slug = f"{year}/{month}/{day}/{safe_keyword}_{idx}"
         
-        with open(file_name, "w", encoding="utf-8") as f:
-            # 寫入 Hugo Front Matter 
-            f.write("---\n")
-            f.write(f"title: {json.dumps(article['title'], ensure_ascii=False)}\n") # 用 json.dumps 處理特殊符號與雙引號
-            f.write(f"date: {hugo_date}\n")
-            f.write(f"persona_id: {article['persona_id']}\n")
-            f.write(f"persona_type: {json.dumps(article['persona_type'], ensure_ascii=False)}\n")
-            f.write(f"search_volume: \"{article['source_volume']}\"\n")
-            f.write("---\n\n")
-            f.write(article['body'])
-            
-    print(f"🏁 MISSION COMPLETE: Saved to {output_dir}/")
+        # 處理 Adsterra 驗證碼，強行確保第 1 篇文內文帶有驗證 token 雙重保險
+        article_body = article['body']
+        if idx == 0:
+            article_body += "\n\nAdsterra verification string: 2HDmQ9"
+
+        # 構造 D1 批量執行（Batch）的 SQL 語句
+        sql = "INSERT OR REPLACE INTO articles (title, keyword, body, persona_id, persona_type, search_volume, created_at, url_slug) VALUES (?, ?, ?, ?, ?, ?, ?, ?);"
+        params = [
+            article['title'],
+            article['keyword'],
+            article_body,
+            article['persona_id'],
+            article['persona_type'],
+            str(article['source_volume']),
+            current_time,
+            url_slug
+        ]
+        statements.append({"sql": sql, "params": params})
+
+    # Cloudflare API 單次 Payload 限制，分批（每 50 篇一組）打包射過去
+    chunk_size = 50
+    headers = {
+        "Authorization": f"Bearer {CLOUDFLARE_API_TOKEN}",
+        "Content-Type": "application/json"
+    }
+    url = f"https://api.cloudflare.com/client/v4/accounts/{CLOUDFLARE_ACCOUNT_ID}/d1/database/{CLOUDFLARE_DATABASE_ID}/query"
+
+    for i in range(0, len(statements), chunk_size):
+        chunk = statements[i:i + chunk_size]
+        try:
+            response = requests.post(url, headers=headers, json={"batches": chunk}, timeout=30)
+            if response.status_code == 200 and response.json().get("success"):
+                print(f"✅ Successfully injected chunk {i // chunk_size + 1}/{((len(statements)-1)//chunk_size)+1}")
+            else:
+                print(f"❌ Failed to inject chunk {i // chunk_size + 1}: {response.text}")
+        except Exception as e:
+            print(f"⚠️ Connection error during chunk {i // chunk_size + 1}: {e}")
+
+    print("🎉 MISSION COMPLETE: All AI articles are stored in the Edge Cloud Database!")
 
 if __name__ == "__main__":
     generate_matrix()
