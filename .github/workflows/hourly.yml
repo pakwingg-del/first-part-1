@@ -32,6 +32,8 @@ jobs:
       - name: Generate Content Matrix & Inject to D1
         env:
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }} # 💡 核心：必須注入呢個，Python 先有權限寫入 D1！
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}   # 💡 核心：必須注入呢個，Python 先有權限寫入 D1！
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }} # 🔑 新增：話畀 Python 聽你個 Cloudflare 帳戶 ID 係咩
+          CLOUDFLARE_DATABASE_ID: ${{ secrets.CLOUDFLARE_DATABASE_ID }} # 🔑 新增：話畀 Python 聽要射落去邊個 D1 資料庫
           REPO_INDEX: 0
         run: python generator.py
