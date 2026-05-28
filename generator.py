@@ -67,7 +67,21 @@ def fetch_single_article(persona_tuple, seed, last_updated):
             max_tokens=400,
             temperature=1.0 
         )
-        content = completion.choices[0].message.content
+        
+        # 🛡️ 安全防禦檢查：確保 completion 結構完整，防止 'NoneType' object is not subscriptable 錯誤
+        if not completion or not completion.choices:
+            print(f"⚠️ Warning: Empty response or choices from DeepSeek for {query}")
+            return None
+            
+        choice = completion.choices[0]
+        if not choice or not hasattr(choice, 'message') or not choice.message:
+            print(f"⚠️ Warning: Bad message payload from DeepSeek for {query}")
+            return None
+            
+        content = choice.message.content
+        if not content:
+            print(f"⚠️ Warning: Content is empty from DeepSeek for {query}")
+            return None
         
         # 💡 2. Python 端後置清洗機制 (Sanitizer)
         lines = [line.strip() for line in content.split('\n') if line.strip()]
@@ -105,7 +119,7 @@ def fetch_single_article(persona_tuple, seed, last_updated):
             "generated_at": last_updated
         }
     except Exception as e:
-        print(f"⚠️ Error with {query} (Round {round_idx+1}): {e}")
+        print(f"⚠️ Error processing {query} (Round {round_idx+1}): {e}")
         return None
 
 def generate_matrix():
@@ -124,10 +138,12 @@ def generate_matrix():
 
     all_articles = []
     
-    print(f"🚀 Starting Parallel Generation (600 tasks) with 5 workers...")
+    # ⚡ 核心優化：將 max_workers 由 5 提升至 30，火力全開！
+    MAX_WORKERS = 30
+    print(f"🚀 Starting Parallel Generation (600 tasks) with {MAX_WORKERS} workers...")
     
     tasks = []
-    with ThreadPoolExecutor(max_workers=5) as executor:
+    with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
         for round_idx, persona in enumerate(PERSONA_MATRIX):
             for seed in seeds:
                 tasks.append(executor.submit(fetch_single_article, (round_idx, persona), seed, last_updated))
@@ -139,8 +155,8 @@ def generate_matrix():
                 all_articles.append(result)
             
             completed_count += 1
-            if completed_count % 50 == 0:
-                print(f"📦 Progress: {completed_count}/600 articles generated...")
+            if completed_count % 50 == 0 or completed_count == len(tasks):
+                print(f"📦 Progress: {completed_count}/{len(tasks)} articles processed...")
 
     # ====================================================
     # 從 GitHub Secrets 注入的環境變數讀取
@@ -199,7 +215,7 @@ def generate_matrix():
     for i in range(0, len(statements), chunk_size):
         chunk = statements[i:i + chunk_size]
         
-        # 🚀 終極修正：Cloudflare 規定的批次 Key 必須是單數 "batch" 而不是 "batches"
+        # 🚀 終極修正：Cloudflare 規规定的批次 Key 必須是單數 "batch" 而不是 "batches"
         payload = {"batch": chunk}
         
         try:
