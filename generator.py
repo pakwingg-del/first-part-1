@@ -3,6 +3,7 @@ import os
 import time
 import requests
 import sys  # 🚀 用來在出錯時中斷 GitHub 流程，讓 Actions 亮紅燈
+import re
 from datetime import datetime
 from openai import OpenAI
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -46,11 +47,21 @@ def fetch_single_article(persona_tuple, seed, last_updated):
     round_idx, current_persona = persona_tuple
     query = seed['query']
     
+    # 💡 1. 強化 Prompt 束縛，逼迫 DeepSeek 生成乾淨、高 SEO CTR 的標題
+    system_prompt = (
+        f"You are a: {current_persona}. Write a unique viral news snippet.\n"
+        f"CRITICAL TITLE RULES:\n"
+        f"- The VERY FIRST LINE of your output must be the title.\n"
+        f"- NEVER use Markdown formatting, asterisks (**), or bold markers in the title.\n"
+        f"- NEVER start the title with generic clichés like 'FOR IMMEDIATE RELEASE:', 'BREAKING:', 'BREAKING NEWS:', 'HEADLINE:', 'Viral News Snippet:', or 'Title:'.\n"
+        f"- The title MUST naturally include the trending keyword '{query}' to maximize Google Search SEO CTR."
+    )
+    
     try:
         completion = client.chat.completions.create(
             model="deepseek-chat",
             messages=[
-                {"role": "system", "content": f"You are a: {current_persona}. Write a unique viral news snippet."},
+                {"role": "system", "content": system_prompt},
                 {"role": "user", "content": f"Topic: {query}"},
             ],
             max_tokens=400,
@@ -58,15 +69,37 @@ def fetch_single_article(persona_tuple, seed, last_updated):
         )
         content = completion.choices[0].message.content
         
-        # 💡 防呆優化：過濾掉開頭的空行，精準撈出第一行做 Title
+        # 💡 2. Python 端後置清洗機制 (Sanitizer)
         lines = [line.strip() for line in content.split('\n') if line.strip()]
-        title = lines[0].replace('#', '').strip() if lines else query
+        raw_title = lines[0] if lines else query
         
+        # (a) 幹掉任何可能殘留的 ** 星號
+        clean_title = raw_title.replace("**", "").replace("#", "").strip()
+        
+        # (b) 用正則表達式把開頭的 AI 罐頭字眼全部切走
+        clean_title = re.sub(
+            r'^(FOR IMMEDIATE RELEASE|BREAKING NEWS|BREAKING|HEADLINE|VIRAL NEWS SNIPPET|TITLE)[:\s]*', 
+            '', 
+            clean_title, 
+            flags=re.IGNORECASE
+        ).strip()
+        
+        # (c) SEO 強制補底：如果 AI 還是吐出極短或無意義的發佈詞，直接套用 Click Farm 萬能長尾公式
+        upper_title = clean_title.upper()
+        if not clean_title or upper_title in ["BREAKING", "BREAKING NEWS", "FOR IMMEDIATE RELEASE"] or len(clean_title) < 25:
+            # 依據 Persona 稍微配一點帶有煽動性的 Click Farm 公式
+            if round_idx in [0, 1, 2, 3]:  # 爆料組
+                clean_title = f"JUST IN: The Shocking Hidden Twist About {query} They Didn't Want You To Know"
+            elif round_idx in [8, 9, 10]:  # 陰謀組
+                clean_title = f"The Matrix Glitch? Inside the Deep Conspiracy Surrounding {query} Revealed"
+            else:  # 通用 SEO 公式
+                clean_title = f"What is {query}? Explaining the Viral Phenomenon Sweeping the Internet Right Now"
+
         return {
             "keyword": query,
             "persona_id": round_idx + 1,
             "persona_type": current_persona.split(',')[0],
-            "title": title,
+            "title": clean_title,  # 寫入乾淨且高價值的標題
             "body": content,
             "source_volume": seed.get("search_volume"),
             "generated_at": last_updated
