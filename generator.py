@@ -125,7 +125,7 @@ def generate_matrix():
         data = response.json()
         trending_seeds = data.get("trending_seeds", [])
         trending_seeds.sort(key=lambda x: (x.get("increase", 0), x.get("search_volume", 0)), reverse=True)
-        seeds = trending_seeds[:60]   # 先用 60 個，比較穩陣
+        seeds = trending_seeds[:80]   # 先用 60 個，比較穩陣
         print(f"✅ Loaded Top {len(seeds)} trends")
     except Exception as e:
         print(f"❌ Error fetching trends: {e}")
