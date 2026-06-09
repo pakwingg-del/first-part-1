@@ -1,32 +1,36 @@
-name: Hourly Content Matrix
+name: Hourly Content Matrix - US Market Optimized
 
 on:
-  workflow_dispatch: # 允許你喺 GitHub 網頁上手動點擊 Run
+  schedule:
+    - cron: '0 1 * * *'    # HKT 09:00 (UTC 01:00)
+    - cron: '0 6 * * *'    # HKT 14:00 (UTC 06:00)
+    - cron: '0 12 * * *'   # HKT 20:00 (UTC 12:00)
+  workflow_dispatch:
   repository_dispatch:
-    types: [external_trigger] # 🚀 新增：允許你用外部 API (例如 Cloudflare Workers) 一鍵炸過來觸發
+    types: [external_trigger]
 
 permissions:
-  contents: read  # 只需要讀取程式碼，安全又省時！
+  contents: write   # 需要 write 權限去 commit sitemap
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
-  run:
+  generate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
           submodules: true
-          fetch-depth: 1 # 深度設為 1 跑得更快！
+          fetch-depth: 1
 
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
+          python-version: '3.11'
 
       - name: Install Dependencies
-        run: pip install requests openai
+        run: pip install requests openai httpx
 
       - name: Generate Content Matrix & Inject to D1
         env:
@@ -34,5 +38,17 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_DATABASE_ID: ${{ secrets.CLOUDFLARE_DATABASE_ID }}
-          REPO_INDEX: 0
         run: python generator.py
+
+      - name: Generate & Commit Sitemap
+        run: python generate_sitemap.py
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_DATABASE_ID: ${{ secrets.CLOUDFLARE_DATABASE_ID }}
+
+      - name: Commit Changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Auto publish: US Market run at ${{ github.event.schedule || 'manual' }}"
+          file_pattern: public/sitemap*.xml
