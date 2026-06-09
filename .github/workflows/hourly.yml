@@ -2,12 +2,10 @@ name: US Market Content Generator (3 times daily)
 
 on:
   schedule:
-    - cron: '3 1 * * *'    # UTC 01:05 → HKT 09:05
-    - cron: '3 6 * * *'    # UTC 06:05 → HKT 14:05
-    - cron: '3 12 * * *'   # UTC 12:05 → HKT 20:05
+    - cron: '5 1 * * *'    # UTC 01:05
+    - cron: '5 6 * * *'    # UTC 06:05
+    - cron: '5 12 * * *'   # UTC 12:05
   workflow_dispatch:
-  repository_dispatch:
-    types: [external_trigger]
 
 permissions:
   contents: write
@@ -17,8 +15,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 1
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -26,9 +22,9 @@ jobs:
           python-version: '3.11'
 
       - name: Install Dependencies
-        run: pip install requests openai
+        run: pip install requests openai google-auth google-api-python-client
 
-      - name: Generate Content + Inject D1 + Sitemap
+      - name: Generate Content + D1 + Sitemap
         env:
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -36,8 +32,18 @@ jobs:
           CLOUDFLARE_DATABASE_ID: ${{ secrets.CLOUDFLARE_DATABASE_ID }}
         run: python generator.py
 
+      - name: Submit to Google Indexing API
+        env:
+          GOOGLE_SERVICE_ACCOUNT_1: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_1 }}
+          GOOGLE_SERVICE_ACCOUNT_2: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_2 }}
+          GOOGLE_SERVICE_ACCOUNT_3: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_3 }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_DATABASE_ID: ${{ secrets.CLOUDFLARE_DATABASE_ID }}
+        run: python submit_indexing.py
+
       - name: Commit Sitemap
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "Auto: Update sitemap.xml"
+          commit_message: "Auto: Update sitemap + indexing"
           file_pattern: public/sitemap.xml
