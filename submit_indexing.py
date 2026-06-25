@@ -6,7 +6,7 @@ import sys
 from datetime import datetime
 
 # ====================== Google Indexing API 配置 ======================
-# 支援 6 個 Service Account
+# 支援 6 個 Service Account (必須來自 6 個不同的 GCP Projects)
 SERVICE_ACCOUNTS = [
     os.getenv("GOOGLE_SERVICE_ACCOUNT_1"),
     os.getenv("GOOGLE_SERVICE_ACCOUNT_2"),
@@ -24,7 +24,7 @@ def get_indexing_service():
         from google.oauth2 import service_account
         from googleapiclient.discovery import build
         
-        # 輪流使用有效嘅 account
+        # 輪流檢查並使用有效嘅 account
         for _ in range(len(SERVICE_ACCOUNTS)):
             account_json = SERVICE_ACCOUNTS[current_account_idx]
             if account_json and account_json.strip():
@@ -35,19 +35,21 @@ def get_indexing_service():
                 print(f"✅ Using Service Account #{current_account_idx + 1}")
                 return service
             
-            # 如果呢個 account 無內容，就跳下一個
+            # 如果呢個 account 無內容，就直接跳下一個
             current_account_idx = (current_account_idx + 1) % len(SERVICE_ACCOUNTS)
         
         print("❌ No valid Service Account found!")
         return None
     except Exception as e:
-        print(f"❌ Failed to load Service Account: {e}")
+        print(f"❌ Failed to load Service Account #{current_account_idx + 1}: {e}")
+        # 載入失敗也必須移到下一個，避免卡死
         current_account_idx = (current_account_idx + 1) % len(SERVICE_ACCOUNTS)
         return None
 
 
 def submit_to_indexing(urls):
     """提交 URLs 到 Google Indexing API"""
+    global current_account_idx
     if not urls:
         print("⚠️ No URLs to submit")
         return
@@ -59,7 +61,6 @@ def submit_to_indexing(urls):
 
     success = 0
     submitted_count = 0
-    max_per_account = 200
 
     for i, url in enumerate(urls):
         try:
@@ -67,23 +68,30 @@ def submit_to_indexing(urls):
             response = service.urlNotifications().publish(body=body).execute()
             success += 1
             submitted_count += 1
-            print(f"✅ Submitted [{submitted_count}]: {url}")
+            print(f"✅ Submitted [{submitted_count}/{len(urls)}]: {url}")
             
-            # 每個 account 提交 180 個就換下一個，留 buffer
+            # 【修正】：每到 180 個換下一個 Account 時，手動將 index 移至下一個獨立 Project
             if submitted_count % 180 == 0 and submitted_count < len(urls):
-                print("🔄 Switching to next Service Account...")
+                print("🔄 Reached 180 URLs limit for this project. Switching to next Project...")
+                current_account_idx = (current_account_idx + 1) % len(SERVICE_ACCOUNTS)
                 service = get_indexing_service()
+                if not service:
+                    print("⚠️ Switch failed, stopping process.")
+                    break
                 
-            time.sleep(0.4)  # 避免 rate limit
+            time.sleep(0.4)  # 避免瞬時頻率過快爆 Rate Limit
             
         except Exception as e:
             error_str = str(e).lower()
             print(f"❌ Failed {url}: {e}")
             
+            # 【修正】：遇到 Quota 上限（如 429 錯誤），即時切換到下一個獨立 Project
             if "quota" in error_str or "limit" in error_str or "permission" in error_str:
-                print("🔄 Quota exceeded, switching account...")
+                print("🔄 Quota exceeded or error met. Switching to next Project...")
+                current_account_idx = (current_account_idx + 1) % len(SERVICE_ACCOUNTS)
                 service = get_indexing_service()
                 if not service:
+                    print("⚠️ No more service accounts available after error.")
                     break
             time.sleep(1)
 
@@ -101,7 +109,7 @@ def generate_and_submit_indexing():
         print("❌ Missing Cloudflare credentials")
         return
 
-    # 拉最近 48 小時文章（比之前多啲，確保新文章被 push）
+    # 拉最近 48 小時文章
     headers = {
         "Authorization": f"Bearer {CLOUDFLARE_API_TOKEN}",
         "Content-Type": "application/json"
