@@ -98,7 +98,7 @@ def fetch_single_article(persona_tuple, seed, last_updated):
        
         final_content = content + "\n\n<h3>Final Thoughts</h3>\n<p>" + opinion + "</p>"
 
-        # 加圖片
+        # 加 Pexels 圖片
         image_path = get_pexels_image(query)
         if image_path:
             final_content = f'<img src="{image_path}" alt="{clean_title}" style="max-width:100%; height:auto; border-radius:8px;"><br><br>' + final_content
@@ -119,7 +119,11 @@ def fetch_single_article(persona_tuple, seed, last_updated):
 
 def generate_sitemap():
     print("🗺️ Generating sitemap...")
-    # （你可以之後再補完整 sitemap 代碼，先跳過都得）
+    # 暫時簡單版，你之後可以再補完整
+    try:
+        print("✅ Sitemap generated (placeholder)")
+    except:
+        pass
 
 
 def generate_matrix():
@@ -145,7 +149,7 @@ def generate_matrix():
 
     tasks = []
     with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
-        for i in range(3):  # 3 輪循環 = 15 variants
+        for i in range(3):  # 3 輪 = 15 variants
             for round_idx, persona in enumerate(PERSONA_MATRIX):
                 for seed in seeds:
                     tasks.append(executor.submit(fetch_single_article, (round_idx, persona), seed, datetime.now().isoformat()))
@@ -160,10 +164,71 @@ def generate_matrix():
             if completed_count % 100 == 0 or completed_count == len(tasks):
                 print(f"📦 Progress: {completed_count}/{len(tasks)} articles processed...")
 
-    print(f"✅ Successfully generated {len(all_articles)} articles.")
+    print(f"✅ Successfully generated {len(all_articles)} articles with images + human touch.")
 
-    # D1 Injection（你原本的代碼）
-    # ... 你原本 D1 部分貼上來 ...
+    # ==================== D1 Injection ====================
+    CLOUDFLARE_ACCOUNT_ID = os.environ.get("CLOUDFLARE_ACCOUNT_ID")
+    CLOUDFLARE_DATABASE_ID = os.environ.get("CLOUDFLARE_DATABASE_ID")
+    CLOUDFLARE_API_TOKEN = os.environ.get("CLOUDFLARE_API_TOKEN")
+   
+    if not all([CLOUDFLARE_ACCOUNT_ID, CLOUDFLARE_DATABASE_ID, CLOUDFLARE_API_TOKEN]):
+        print("❌ Critical Error: Missing Cloudflare credentials!")
+        sys.exit(1)
+
+    print(f"🚀 Preparing to inject {len(all_articles)} articles into Cloudflare D1...")
+    current_time = int(time.time())
+    hugo_date = datetime.now()
+    year = hugo_date.strftime("%Y")
+    month = hugo_date.strftime("%m")
+    day = hugo_date.strftime("%d")
+   
+    statements = []
+    for idx, article in enumerate(all_articles):
+        safe_keyword = "".join([c if c.isalnum() else "_" for c in article['keyword']]).lower()
+        url_slug = f"{year}/{month}/{day}/{safe_keyword}_{idx}"
+       
+        article_body = article['body']
+        if idx == 0:
+            article_body += "\n\nAdsterra verification string: 2HDmQ9"
+       
+        sql = "INSERT OR REPLACE INTO articles (title, keyword, body, persona_id, persona_type, search_volume, created_at, url_slug) VALUES (?, ?, ?, ?, ?, ?, ?, ?);"
+        params = [
+            article['title'],
+            article['keyword'],
+            article_body,
+            article['persona_id'],
+            article['persona_type'],
+            str(article['source_volume']),
+            current_time,
+            url_slug
+        ]
+        statements.append({"sql": sql, "params": params})
+
+    # 分批注入
+    chunk_size = 50
+    headers = {"Authorization": f"Bearer {CLOUDFLARE_API_TOKEN}", "Content-Type": "application/json"}
+    url = f"https://api.cloudflare.com/client/v4/accounts/{CLOUDFLARE_ACCOUNT_ID}/d1/database/{CLOUDFLARE_DATABASE_ID}/query"
+   
+    has_error = False
+    for i in range(0, len(statements), chunk_size):
+        chunk = statements[i:i + chunk_size]
+        payload = {"batch": chunk}
+        try:
+            response = requests.post(url, headers=headers, json=payload, timeout=30)
+            if response.status_code == 200 and response.json().get("success"):
+                print(f"✅ Injected chunk {i//chunk_size + 1}")
+            else:
+                print(f"❌ Failed chunk {i//chunk_size + 1}: {response.text}")
+                has_error = True
+        except Exception as e:
+            print(f"⚠️ Error in chunk {i//chunk_size + 1}: {e}")
+            has_error = True
+
+    if has_error:
+        print("❌ MISSION FAILED")
+        sys.exit(1)
+    else:
+        print("🎉 All articles injected into D1!")
 
     generate_sitemap()
     print("🎉 US Market Batch Complete!")
