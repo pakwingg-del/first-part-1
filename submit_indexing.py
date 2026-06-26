@@ -48,7 +48,7 @@ def get_indexing_service():
 
 
 def submit_to_indexing(urls):
-    """提交 URLs 到 Google Indexing API"""
+    """提交 URLs 到 Google Indexing API（具備安全的專案切換與熔斷機制）"""
     global current_account_idx
     if not urls:
         print("⚠️ No URLs to submit")
@@ -61,16 +61,26 @@ def submit_to_indexing(urls):
 
     success = 0
     submitted_count = 0
+    
+    # 紀錄連續因為 Quota 限制而切換失敗的次數，如果 6 個都滿了，就安全退出
+    consecutive_quota_failures = 0 
 
     for i, url in enumerate(urls):
+        # 熔斷保護：若 6 個專案全部都已耗盡配額，直接提早中斷，避免盲目狂撞
+        if consecutive_quota_failures >= len(SERVICE_ACCOUNTS):
+            print("🚨 [熔斷觸發] 所有 6 個 Service Accounts 的今日配額均已耗盡！程式提前結束。")
+            break
+
         try:
             body = {"url": url, "type": "URL_UPDATED"}
             response = service.urlNotifications().publish(body=body).execute()
+            
             success += 1
             submitted_count += 1
+            consecutive_quota_failures = 0  # 只要成功提交一條，重置失敗計數
             print(f"✅ Submitted [{submitted_count}/{len(urls)}]: {url}")
             
-            # 【修正】：每到 180 個換下一個 Account 時，手動將 index 移至下一個獨立 Project
+            # 每成功提交 180 個換下一個 Account，平攤風險
             if submitted_count % 180 == 0 and submitted_count < len(urls):
                 print("🔄 Reached 180 URLs limit for this project. Switching to next Project...")
                 current_account_idx = (current_account_idx + 1) % len(SERVICE_ACCOUNTS)
@@ -79,21 +89,34 @@ def submit_to_indexing(urls):
                     print("⚠️ Switch failed, stopping process.")
                     break
                 
-            time.sleep(0.4)  # 避免瞬時頻率過快爆 Rate Limit
+            time.sleep(0.5)  # 稍微拉長間隔，對 API 更安全穩定
             
         except Exception as e:
             error_str = str(e).lower()
             print(f"❌ Failed {url}: {e}")
             
-            # 【修正】：遇到 Quota 上限（如 429 錯誤），即時切換到下一個獨立 Project
+            # 判斷是否為配額超出 (429) 或權限臨時卡住 (403)
             if "quota" in error_str or "limit" in error_str or "permission" in error_str:
-                print("🔄 Quota exceeded or error met. Switching to next Project...")
+                consecutive_quota_failures += 1
+                print(f"⚠️ Account #{current_account_idx + 1} 遇到限制 ({consecutive_quota_failures}/{len(SERVICE_ACCOUNTS)}).")
+                
+                if consecutive_quota_failures >= len(SERVICE_ACCOUNTS):
+                    print("🚨 所有帳號皆已嘗試，全數無剩餘配額。")
+                    break
+                
+                # 順序切換去下一個專案
+                print("🔄 Switching to next Project...")
                 current_account_idx = (current_account_idx + 1) % len(SERVICE_ACCOUNTS)
                 service = get_indexing_service()
                 if not service:
                     print("⚠️ No more service accounts available after error.")
                     break
-            time.sleep(1)
+                
+                # 給予 2 秒沉澱緩衝，防止連環瞬間撞擊
+                time.sleep(2)
+            else:
+                # 其他網絡波動等隨機錯誤，停 1 秒繼續試下一條
+                time.sleep(1)
 
     print(f"🎯 Indexing API Complete: {success} URLs submitted successfully")
 
@@ -120,7 +143,7 @@ def generate_and_submit_indexing():
         SELECT url_slug, created_at 
         FROM articles 
         WHERE created_at >= ? 
-        ORDER BY created_at DESC 
+        ORDER BY create_at DESC 
         LIMIT 1200
     """
     last_48h = int(time.time()) - 172800   # 48小時
