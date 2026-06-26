@@ -58,7 +58,7 @@ def get_pexels_image(query):
 def fetch_single_article(persona_tuple, seed, last_updated):
     round_idx, current_persona = persona_tuple
     query = seed['query']
-   
+  
     system_prompt = (
         f"You are a: {current_persona}. Write a unique, engaging viral news article for American audience.\n"
         f"CRITICAL RULES:\n"
@@ -67,7 +67,7 @@ def fetch_single_article(persona_tuple, seed, last_updated):
         f"- Do NOT write conclusion yet.\n"
         f"- Use American English."
     )
-   
+  
     try:
         completion = client.chat.completions.create(
             model="deepseek-chat",
@@ -76,13 +76,13 @@ def fetch_single_article(persona_tuple, seed, last_updated):
             max_tokens=1300,
             temperature=0.85
         )
-       
+      
         content = completion.choices[0].message.content.strip()
         lines = [line.strip() for line in content.split('\n') if line.strip()]
         raw_title = lines[0] if lines else query
-       
+      
         clean_title = re.sub(r'^(FOR IMMEDIATE RELEASE|BREAKING NEWS|BREAKING|HEADLINE|TITLE)[:\s]*', '', raw_title, flags=re.IGNORECASE).strip()
-       
+      
         if len(clean_title) < 30:
             clean_title = f"Shocking New Update About {query} That's Going Viral Across America Right Now"
 
@@ -95,7 +95,7 @@ def fetch_single_article(persona_tuple, seed, last_updated):
             temperature=0.9
         )
         opinion = opinion_completion.choices[0].message.content.strip()
-       
+      
         final_content = content + "\n\n<h3>Final Thoughts</h3>\n<p>" + opinion + "</p>"
 
         # 加 Pexels 圖片
@@ -116,50 +116,45 @@ def fetch_single_article(persona_tuple, seed, last_updated):
         print(f"⚠️ Error processing {query}: {e}")
         return None
 
-
 def generate_sitemap():
     print("🗺️ Generating sitemap...")
-    # 暫時簡單版，你之後可以再補完整
     try:
         print("✅ Sitemap generated (placeholder)")
     except:
         pass
 
-
 def generate_matrix():
     trends_url = "https://raw.githubusercontent.com/pakwingg-del/Trends-Hub/main/master_trends.json"
     print(f"📡 Fetching latest US trends...")
-   
+  
     try:
         response = requests.get(trends_url)
         response.raise_for_status()
         data = response.json()
         trending_seeds = data.get("trending_seeds", [])
         trending_seeds.sort(key=lambda x: (x.get("increase", 0), x.get("search_volume", 0)), reverse=True)
-        seeds = trending_seeds[:80]
+        seeds = trending_seeds[:80]   # 80 trends
         print(f"✅ Loaded Top {len(seeds)} trends")
     except Exception as e:
         print(f"❌ Error fetching trends: {e}")
         sys.exit(1)
 
     all_articles = []
-    MAX_WORKERS = 50
-    
-    print(f"🚀 Starting Large Generation: 80 trends × 15 variants = 1200 articles...")
-
+    MAX_WORKERS = 40
+   
+    print(f"🚀 Starting Generation: 80 trends × 5 personas = **400 articles**...")
     tasks = []
     with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
-        for i in range(3):  # 3 輪 = 15 variants
-            for round_idx, persona in enumerate(PERSONA_MATRIX):
-                for seed in seeds:
-                    tasks.append(executor.submit(fetch_single_article, (round_idx, persona), seed, datetime.now().isoformat()))
+        for round_idx, persona in enumerate(PERSONA_MATRIX):   # 只做 1 輪
+            for seed in seeds:
+                tasks.append(executor.submit(fetch_single_article, (round_idx, persona), seed, datetime.now().isoformat()))
 
         completed_count = 0
         for future in as_completed(tasks):
             result = future.result()
             if result:
                 all_articles.append(result)
-           
+          
             completed_count += 1
             if completed_count % 100 == 0 or completed_count == len(tasks):
                 print(f"📦 Progress: {completed_count}/{len(tasks)} articles processed...")
@@ -170,7 +165,7 @@ def generate_matrix():
     CLOUDFLARE_ACCOUNT_ID = os.environ.get("CLOUDFLARE_ACCOUNT_ID")
     CLOUDFLARE_DATABASE_ID = os.environ.get("CLOUDFLARE_DATABASE_ID")
     CLOUDFLARE_API_TOKEN = os.environ.get("CLOUDFLARE_API_TOKEN")
-   
+  
     if not all([CLOUDFLARE_ACCOUNT_ID, CLOUDFLARE_DATABASE_ID, CLOUDFLARE_API_TOKEN]):
         print("❌ Critical Error: Missing Cloudflare credentials!")
         sys.exit(1)
@@ -181,16 +176,16 @@ def generate_matrix():
     year = hugo_date.strftime("%Y")
     month = hugo_date.strftime("%m")
     day = hugo_date.strftime("%d")
-   
+  
     statements = []
     for idx, article in enumerate(all_articles):
         safe_keyword = "".join([c if c.isalnum() else "_" for c in article['keyword']]).lower()
         url_slug = f"{year}/{month}/{day}/{safe_keyword}_{idx}"
-       
+      
         article_body = article['body']
         if idx == 0:
             article_body += "\n\nAdsterra verification string: 2HDmQ9"
-       
+      
         sql = "INSERT OR REPLACE INTO articles (title, keyword, body, persona_id, persona_type, search_volume, created_at, url_slug) VALUES (?, ?, ?, ?, ?, ?, ?, ?);"
         params = [
             article['title'],
@@ -208,7 +203,7 @@ def generate_matrix():
     chunk_size = 50
     headers = {"Authorization": f"Bearer {CLOUDFLARE_API_TOKEN}", "Content-Type": "application/json"}
     url = f"https://api.cloudflare.com/client/v4/accounts/{CLOUDFLARE_ACCOUNT_ID}/d1/database/{CLOUDFLARE_DATABASE_ID}/query"
-   
+  
     has_error = False
     for i in range(0, len(statements), chunk_size):
         chunk = statements[i:i + chunk_size]
@@ -232,7 +227,6 @@ def generate_matrix():
 
     generate_sitemap()
     print("🎉 US Market Batch Complete!")
-
 
 if __name__ == "__main__":
     generate_matrix()
