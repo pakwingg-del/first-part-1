@@ -143,7 +143,7 @@ def generate_and_submit_indexing():
         SELECT url_slug, created_at 
         FROM articles 
         WHERE created_at >= ? 
-        ORDER BY create_at DESC 
+        ORDER BY created_at DESC 
         LIMIT 1200
     """
     last_48h = int(time.time()) - 172800   # 48小時
@@ -154,7 +154,8 @@ def generate_and_submit_indexing():
         
         if resp.status_code == 200:
             results = resp.json().get("result", [{}])[0].get("results", [])
-            urls = [f"https://virallnn.com/{row['url_slug']}" for row in results]
+            # 🔴 修正盲點：確保 Domain 係正確的 viralnn.com (得一個 l)
+            urls = [f"https://viralnn.com/{row['url_slug']}" for row in results]
             
             print(f"📋 Found {len(urls)} new articles to submit to Google")
             submit_to_indexing(urls)
